@@ -1,0 +1,5 @@
+username,password,role
+alice,pass123,Waiter
+bob,chefpass,Chef
+carl,busboy123,Busboy
+manager,mgrpass,Manager
