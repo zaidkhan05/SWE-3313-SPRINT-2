@@ -2,7 +2,26 @@
 <html>
 <head>
   <title>J's Restaurant Login</title>
-  <script defer src="login.js"></script>
+  <script defer src="login.js">
+    if (response.ok) {
+      switch (data.role) {
+        case "Waiter":
+          window.location.href = "waiter.html";
+          break;
+        case "Chef":
+          window.location.href = "chef.html";
+          break;
+        case "Busboy":
+          window.location.href = "busboy.html";
+          break;
+        case "Manager":
+          window.location.href = "manager.html";
+          break;
+        default:
+          alert("Unknown role");
+      }
+    }
+  </script>
 </head>
 <body>
   <h2>Login</h2>
