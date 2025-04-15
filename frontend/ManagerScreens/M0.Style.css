@@ -1,0 +1,22 @@
+.tab a {
+    flex: 1;
+    height: 100%;
+    background-color: #e4cc89ff;
+    border: 1px solid #595959;
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+h1 a {
+    font-family: 'Oswald';
+    text-align: center;
+    align-items: center;
+    color: #412527;
+    font-size: 30px;
+    text-decoration: underline;
+    font-weight: 575;
+    display: inline;
+    padding: 0;
+    margin: 0;
+}

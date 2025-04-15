@@ -1,0 +1,41 @@
+body {
+    background: #eee6deff;
+}
+
+:root {
+    --box-height: 100px;
+}
+
+.top-row {
+    display: flex;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: #f0f0f0;
+    height: var(--box-height);
+}
+
+.selectedTab {
+    flex: 1;
+    height: 100%;
+    background-color: #eee6deff;
+}
+
+.tab {
+    flex: 1;
+    height: 100%;
+    background-color: #e4cc89ff;
+    border: 1px solid #595959;
+}
+
+h1 {
+    font-family: 'Oswald';
+    text-align: center;
+    align-items: center;
+    color: #412527;
+    font-size: 30px;
+    text-decoration: underline;
+    font-weight: 575;
+}
