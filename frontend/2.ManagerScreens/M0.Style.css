@@ -1,0 +1,22 @@
+.tab a {
+    flex: inherit;
+    height: inherit;
+    background-color: inherit;
+    border: 1px solid inherit;
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+h3 a {
+    font-family: inherit;
+    text-align: inherit;
+    align-items: inherit;
+    color: inherit;
+    font-size: inherit;
+    text-decoration: inherit;
+    font-weight: inherit;
+    display: inline;
+    padding: 0;
+    margin: 0;
+}

@@ -33,6 +33,14 @@ body {
 h1 {
     font-family: 'Oswald';
     text-align: center;
+    color: #517366;
+    font-size: 70px;
+    text-decoration: underline;
+}
+
+h3 {
+    font-family: 'Oswald';
+    text-align: center;
     align-items: center;
     color: #412527;
     font-size: 30px;
