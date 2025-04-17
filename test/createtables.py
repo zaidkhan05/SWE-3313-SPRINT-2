@@ -30,5 +30,3 @@ for filename, columns in csv_data.items():
     filepath = os.path.join(base_path, filename)
     df.to_csv(filepath, index=False)
     created_files.append(filepath)
-
-created_files
