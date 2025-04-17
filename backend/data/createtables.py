@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Folder where CSVs will be saved
-base_path = ""
+base_path = "test"
 os.makedirs(base_path, exist_ok=True)
 
 # Define all CSVs with their structure

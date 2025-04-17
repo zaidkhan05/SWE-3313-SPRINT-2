@@ -1,0 +1,45 @@
+ItemID,Name,Category,Price,Stock
+1,Chicken Nachos,Appetizer,8.5,100
+2,Pork Nachos,Appetizer,8.5,100
+3,Pork or Chicken Sliders,Appetizer,5.0,100
+4,Catfish Bites,Appetizer,6.5,100
+5,Fried Veggies,Appetizer,6.5,100
+6,House Salad,Salad,7.5,100
+7,Wedge Salad,Salad,7.5,100
+8,Caesar Salad,Salad,7.5,100
+9,Sweet Potato Chicken Salad,Salad,11.5,100
+10,Shrimp & Grits,Entree,13.5,100
+11,Sweet Tea Fried Chicken,Entree,11.5,100
+12,Caribbean Chicken,Entree,11.5,100
+13,Grilled Pork Chops,Entree,11.0,100
+14,New York Strip Steak,Entree,17.0,100
+15,Seared Tuna,Entree,15.0,100
+16,Captain Crunch Chicken Tenders,Entree,11.5,100
+17,Shock Top Grouper Fingers,Entree,11.5,100
+18,Mac & Cheese Bar,Entree,8.5,100
+19,Curly Fries,Side,2.5,200
+20,Wing Chips,Side,2.5,200
+21,Sweet Potato Fries,Side,2.5,200
+22,Creamy Cabbage Slaw,Side,2.5,200
+23,Adluh Cheese Grits,Side,2.5,200
+24,Mashed Potatoes,Side,2.5,200
+25,Mac & Cheese,Side,2.5,200
+26,Seasonal Vegetables,Side,2.5,200
+27,Baked Beans,Side,2.5,200
+28,Grilled Cheese,Sandwich,5.5,100
+29,Chicken BLT&A,Sandwich,10.0,100
+30,Philly,Sandwich,13.5,100
+31,Club,Sandwich,10.0,100
+32,Meatball Sub,Sandwich,10.0,100
+33,Bacon Cheeseburger,Burger,11.0,100
+34,Carolina Burger,Burger,11.0,100
+35,Portobello Burger (V),Burger,8.5,100
+36,Vegan Boca Burger (V),Burger,10.5,100
+37,Sweet Tea,Beverage,2.0,300
+38,Unsweetened Tea,Beverage,2.0,300
+39,Coke,Beverage,2.0,300
+40,Diet Coke,Beverage,2.0,300
+41,Sprite,Beverage,2.0,300
+42,Bottled Water,Beverage,2.0,300
+43,Lemonade,Beverage,2.0,300
+44,Orange Juice,Beverage,2.0,300

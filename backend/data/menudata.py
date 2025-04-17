@@ -1,3 +1,4 @@
+import pandas as pd
 # Pre-fill menu_items.csv using data extracted from the menu
 menu_items_data = [
     # Appetizers
@@ -64,7 +65,5 @@ menu_df = pd.DataFrame(menu_items_data, columns=["Name", "Category", "Price", "S
 menu_df.insert(0, "ItemID", range(1, len(menu_df) + 1))
 
 # Save the updated menu_items.csv
-menu_csv_path = "menu_items.csv"
+menu_csv_path = "test/menu_items.csv"
 menu_df.to_csv(menu_csv_path, index=False)
-
-import ace_tools as tools; tools.display_dataframe_to_user(name="Menu Items", dataframe=menu_df)
