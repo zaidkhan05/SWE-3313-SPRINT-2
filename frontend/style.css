@@ -1,7 +1,42 @@
+/*Screen Backgrounds*/
 body {
     background: #eee6deff;
 }
 
+/*Used for titles*/
+h1 {
+    font-family: 'Oswald';
+    text-align: center;
+    color: #517366;
+    font-size: 70px;
+    text-decoration: underline;
+}
+
+/*h2 can still be used for something*/
+
+
+/*Used for tab names*/
+h3 {
+    font-family: 'Oswald';
+    text-align: center;
+    align-items: center;
+    color: #412527;
+    font-size: 30px;
+    text-decoration: underline;
+    font-weight: 575;
+}
+
+/*Used for pop-up notifications*/
+h4 {
+    font-family: 'Oswald';
+    text-align: center;
+    align-items: center;
+    color: #000000;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/*".root", ".top-row", ".selectedTab", and ".tab" are needed for the top row of tab buttons*/
 :root {
     --box-height: 100px;
 }
@@ -30,20 +65,85 @@ body {
     border: 1px solid #595959;
 }
 
-h1 {
-    font-family: 'Oswald';
-    text-align: center;
-    color: #517366;
-    font-size: 70px;
-    text-decoration: underline;
+/*Needed for pop-ups*/
+.modal {
+    display:none ;
+    position: fixed; 
+    
+    bottom: 150;
+    width: 100%;
+    height: 100%;
+    
+    /* SAVE FOR LATER WHEN NEEDED IN ORDERS */
+    /*background-color: rgba(0, 0, 0, 0.5);*/ /*Black background with opacity */
 }
 
-h3 {
+/* The modal content box */
+.modal-content {
+    font-family: 'Oswald';
+    background-color: #999999ff;
+    margin: 15% auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 500px;
+
+    overflow: hidden; /* ensures buttons stay flush */
+    display: flex;
+    flex-direction: column;
+}
+  
+.modal-body {
+    padding: 20px;
+    text-align: center;
+}
+  
+.modal-buttons {
+    display: flex;
+    width: 100%;
+    height: 50px;
+}
+  
+.modal-buttons button {
+    flex: 1;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    padding: 0;
+}
+  
+.back-button {
+    background-color: rgb(255, 77, 77);
+    border-right: 1px solid #aaa;
+}
+  
+.back-button:hover {
+    background-color: rgb(255, 43, 43);
+}
+  
+.confirm-button {
+    background-color: #4CAF50;
+    color: white;
+}
+  
+.confirm-button:hover {
+    background-color: #45a049;
+}
+
+.logoutButton {
+    width: 300px;
+    height: 150px;
+    background-color: #999999ff;
+    
+    position: absolute;
+    bottom: 150px;
+    right: 50px;
+    border: 2px solid #595959;
+    padding: 10px;
+
     font-family: 'Oswald';
     text-align: center;
-    align-items: center;
-    color: #412527;
-    font-size: 30px;
-    text-decoration: underline;
-    font-weight: 575;
+    font-size: 52px;
 }
