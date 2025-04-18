@@ -15,6 +15,7 @@ INVENTORY_FILE = os.path.join(DATA_DIR, "inventory.csv")
 CLOCKIN_FILE = os.path.join(DATA_DIR, "clockin.csv")
 MENU_FILE = os.path.join(DATA_DIR, "menu_items.csv")
 ATTEMPTS_FILE = os.path.join(DATA_DIR, "login_attempts.csv")
+TABLES_FILE = os.path.join(DATA_DIR, "tables.csv")
 
 os.makedirs(DATA_DIR, exist_ok=True)
 
@@ -79,7 +80,28 @@ def reset_attempts():
     return jsonify({"success": True, "message": f"Login attempts reset for {target_user}"})
 
 
+# ----------------------- TABLE ROUTES -----------------------
+@app.route("/api/tables", methods=["GET"])
+def get_tables():
+    tables = load_csv(TABLES_FILE, ["TableID", "Status", "WaiterID", "BusboyID"])
+    return tables.to_dict(orient="records")
+
+@app.route("/api/tables/update", methods=["POST"])
+def update_table_status():
+    data = request.json
+    tables = load_csv(TABLES_FILE, ["TableID", "Status", "WaiterID", "BusboyID"])
+    if data["TableID"] in tables["TableID"].values:
+        tables.loc[tables["TableID"] == data["TableID"], "Status"] = data["Status"]
+        save_csv(tables, TABLES_FILE)
+        return jsonify({"success": True})
+    return jsonify({"success": False, "message": "Table not found"}), 404
+
+
+
 # ----------------------- WAITER ROUTES -----------------------
+
+
+
 # @app.route("/api/waiter/orders", methods=["GET"])
 # def waiter_orders():
 #     orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
