@@ -1,5 +1,3 @@
-username,password,role
-alice,pass123,Waiter
-bob,chefpass,Chef
-carl,busboy123,Busboy
-manager,mgrpass,Manager
+UserName,Password,EmployeeID,Role,Clock_In_Time,Clock_Out_Time
+manager,managerpass,001,Manager
+fred,waiterpass,002,Waiter
