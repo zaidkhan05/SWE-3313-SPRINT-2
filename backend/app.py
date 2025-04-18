@@ -1,3 +1,4 @@
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
@@ -12,7 +13,7 @@ USERS_FILE = os.path.join(DATA_DIR, "users.csv")
 ORDERS_FILE = os.path.join(DATA_DIR, "orders.csv")
 INVENTORY_FILE = os.path.join(DATA_DIR, "inventory.csv")
 CLOCKIN_FILE = os.path.join(DATA_DIR, "clockin.csv")
-MENU_FILE = os.path.join(DATA_DIR, "menu.csv")
+MENU_FILE = os.path.join(DATA_DIR, "menu_items.csv")
 ATTEMPTS_FILE = os.path.join(DATA_DIR, "login_attempts.csv")
 
 os.makedirs(DATA_DIR, exist_ok=True)
@@ -32,7 +33,7 @@ def login():
     username = data.get("username")
     password = data.get("password")
 
-    users = load_csv(USERS_FILE, ["username", "password", "role"])
+    users = load_csv(USERS_FILE, ["UserName", "Password", "Role"])
     attempts = load_csv(ATTEMPTS_FILE, ["username", "attempts"])
 
     if username in attempts["username"].values:
@@ -40,14 +41,14 @@ def login():
         if attempt_row.iloc[0]["attempts"] >= 3:
             return jsonify({"success": False, "message": "Account locked. Contact a manager to reset your login."}), 403
 
-    match = users[(users["username"] == username) & (users["password"] == password)]
+    match = users[(users["UserName"] == username) & (users["Password"] == password)]
     if not match.empty:
         attempts = attempts[attempts["username"] != username]
         save_csv(attempts, ATTEMPTS_FILE)
         return jsonify({
             "success": True,
             "username": username,
-            "role": match.iloc[0]["role"]
+            "role": match.iloc[0]["Role"]
         })
     else:
         if username in attempts["username"].values:
@@ -64,8 +65,8 @@ def reset_attempts():
     manager_pass = data.get("manager_password")
     target_user = data.get("username")
 
-    users = load_csv(USERS_FILE, ["username", "password", "role"])
-    manager = users[(users["username"] == manager_user) & (users["password"] == manager_pass) & (users["role"].str.lower() == "manager")]
+    users = load_csv(USERS_FILE, ["UserName", "Password", "Role"])
+    manager = users[(users["UserName"] == manager_user) & (users["Password"] == manager_pass) & (users["Role"].str.lower() == "manager")]
 
     if manager.empty:
         return jsonify({"success": False, "message": "Unauthorized reset attempt."}), 403
@@ -79,67 +80,55 @@ def reset_attempts():
 # ----------------------- WAITER ROUTES -----------------------
 @app.route("/api/waiter/orders", methods=["GET"])
 def waiter_orders():
-    orders = load_csv(ORDERS_FILE, ["table", "item", "quantity", "notes", "status", "timestamp"])
-    pending = orders[orders["status"].str.lower() != "ready"]
+    orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
+    pending = orders[orders["Status"].str.lower() != "ready"]
     return pending.to_dict(orient="records")
 
 @app.route("/api/waiter/clockin", methods=["GET"])
 def waiter_clockin_history():
-    clock_data = load_csv(CLOCKIN_FILE, ["username", "role", "date", "hours"])
-    waiters = clock_data[clock_data["role"].str.lower() == "waiter"]
+    clock_data = load_csv(CLOCKIN_FILE, ["UserName", "Role", "Date", "Hours"])
+    waiters = clock_data[clock_data["Role"].str.lower() == "waiter"]
     return waiters.to_dict(orient="records")
 
 @app.route("/api/menu", methods=["GET"])
 def get_menu():
-    menu = load_csv(MENU_FILE, ["category", "item", "description", "price"])
+    menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock"])
     return menu.to_dict(orient="records")
 
 @app.route("/api/orders", methods=["POST"])
 def submit_order():
     data = request.json
     order = {
-        "table": data.get("table"),
-        "item": data.get("item"),
-        "quantity": data.get("quantity"),
-        "notes": data.get("notes"),
-        "status": "Pending",
-        "timestamp": datetime.now().isoformat()
+        "OrderID": data.get("OrderID"),
+        "Status": "Pending",
+        "TimeStamp": datetime.now().isoformat(),
+        "WaiterID": data.get("WaiterID"),
+        "TableID": data.get("TableID")
     }
-    orders = load_csv(ORDERS_FILE, ["table", "item", "quantity", "notes", "status", "timestamp"])
+    orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
     orders = pd.concat([orders, pd.DataFrame([order])], ignore_index=True)
     save_csv(orders, ORDERS_FILE)
     return jsonify({"success": True})
 
 @app.route("/api/orders", methods=["GET"])
 def get_orders():
-    orders = load_csv(ORDERS_FILE, ["table", "item", "quantity", "notes", "status", "timestamp"])
+    orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
     return orders.to_dict(orient="records")
-
 
 # ----------------------- MANAGER ROUTES -----------------------
-@app.route("/api/manager/orders", methods=["GET"])
-def manager_get_orders():
-    orders = load_csv(ORDERS_FILE, ["table", "item", "quantity", "notes", "status", "timestamp"])
-    return orders.to_dict(orient="records")
-
-@app.route("/api/manager/order-history", methods=["GET"])
-def manager_order_history():
-    orders = load_csv(ORDERS_FILE, ["table", "item", "quantity", "notes", "status", "timestamp"])
-    completed = orders[orders["status"].str.lower() == "ready"]
-    return completed.to_dict(orient="records")
-
 @app.route("/api/manager/inventory", methods=["GET"])
 def manager_inventory():
-    inventory = load_csv(INVENTORY_FILE, ["item", "quantity"])
+    inventory = load_csv(INVENTORY_FILE, ["InventoryID", "LastRestockDate", "ReorderLevel", "Name", "Quantity", "Supplier"])
     return inventory.to_dict(orient="records")
 
 @app.route("/api/manager/inventory", methods=["POST"])
 def manager_update_inventory():
     data = request.json
-    inventory = load_csv(INVENTORY_FILE, ["item", "quantity"])
-    existing = inventory[inventory["item"] == data["item"]]
+    inventory = load_csv(INVENTORY_FILE, ["InventoryID", "LastRestockDate", "ReorderLevel", "Name", "Quantity", "Supplier"])
+    existing = inventory[inventory["InventoryID"] == data["InventoryID"]]
     if not existing.empty:
-        inventory.loc[inventory["item"] == data["item"], "quantity"] = data["quantity"]
+        for col in data:
+            inventory.loc[inventory["InventoryID"] == data["InventoryID"], col] = data[col]
     else:
         inventory = pd.concat([inventory, pd.DataFrame([data])], ignore_index=True)
     save_csv(inventory, INVENTORY_FILE)
@@ -148,49 +137,10 @@ def manager_update_inventory():
 @app.route("/api/manager/inventory/delete", methods=["POST"])
 def manager_delete_inventory():
     data = request.json
-    inventory = load_csv(INVENTORY_FILE, ["item", "quantity"])
-    inventory = inventory[inventory["item"] != data["item"]]
+    inventory = load_csv(INVENTORY_FILE, ["InventoryID", "LastRestockDate", "ReorderLevel", "Name", "Quantity", "Supplier"])
+    inventory = inventory[inventory["InventoryID"] != data["InventoryID"]]
     save_csv(inventory, INVENTORY_FILE)
     return jsonify({"success": True})
-
-@app.route("/api/manager/employees", methods=["GET"])
-def manager_get_employees():
-    users = load_csv(USERS_FILE, ["username", "password", "role"])
-    return users.to_dict(orient="records")
-
-@app.route("/api/manager/employees", methods=["POST"])
-def manager_add_employee():
-    data = request.json
-    users = load_csv(USERS_FILE, ["username", "password", "role"])
-    if data["username"] in users["username"].values:
-        return jsonify({"success": False, "message": "Username already exists"}), 409
-    new_user = pd.DataFrame([data])
-    users = pd.concat([users, new_user], ignore_index=True)
-    save_csv(users, USERS_FILE)
-    return jsonify({"success": True})
-
-@app.route("/api/manager/employees/delete", methods=["POST"])
-def manager_delete_employee():
-    data = request.json
-    users = load_csv(USERS_FILE, ["username", "password", "role"])
-    users = users[users["username"] != data["username"]]
-    save_csv(users, USERS_FILE)
-    return jsonify({"success": True})
-
-@app.route("/api/manager/clockin", methods=["GET"])
-def manager_clockin():
-    clock_data = load_csv(CLOCKIN_FILE, ["username", "role", "date", "hours"])
-    return clock_data.to_dict(orient="records")
-
-@app.route("/api/manager/analytics", methods=["GET"])
-def manager_analytics():
-    orders = load_csv(ORDERS_FILE, ["table", "item", "quantity", "notes", "status", "timestamp"])
-    total_orders = len(orders)
-    top_items = orders["item"].value_counts().head(3).to_dict()
-    return {
-        "total_orders": total_orders,
-        "top_items": top_items
-    }
 
 if __name__ == "__main__":
     app.run(debug=True)
