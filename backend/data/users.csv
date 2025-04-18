@@ -1,1 +1,3 @@
 UserName,Password,EmployeeID,Role,Clock_In_Time,Clock_Out_Time
+manager,managerpass,001,manager
+fred,waiterpass,002,Waiter
