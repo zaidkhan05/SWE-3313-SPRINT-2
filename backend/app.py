@@ -26,6 +26,36 @@ def load_csv(file, columns):
 def save_csv(df, file):
     df.to_csv(file, index=False)
 
+
+
+# ----------------------- AUTO-INITIALIZE MANAGER -----------------------
+@app.before_first_request
+def ensure_manager_exists():
+    users = load_csv(USERS_FILE, ["UserName", "Password", "EmployeeID", "Role", "Clock_In_Time", "Clock_Out_Time"])
+    if users.empty:
+        print("\n--- No users found. Please create a manager account using the /api/init-manager endpoint.\n")
+
+# ----------------------- INIT MANAGER -----------------------
+@app.route("/api/init-manager", methods=["POST"])
+def init_manager():
+    data = request.json
+    users = load_csv(USERS_FILE, ["UserName", "Password", "EmployeeID", "Role", "Clock_In_Time", "Clock_Out_Time"])
+    if not users.empty:
+        return jsonify({"success": False, "message": "Manager already exists."}), 400
+
+    new_manager = {
+        "UserName": data.get("username"),
+        "Password": data.get("password"),
+        "EmployeeID": data.get("employee_id", "MGR001"),
+        "Role": "Manager",
+        "Clock_In_Time": "",
+        "Clock_Out_Time": ""
+    }
+    users = pd.DataFrame([new_manager])
+    save_csv(users, USERS_FILE)
+    return jsonify({"success": True, "message": "Manager account created."})
+
+
 # ----------------------- AUTH: LOGIN WITH ATTEMPT TRACKING -----------------------
 @app.route("/api/login", methods=["POST"])
 def login():
