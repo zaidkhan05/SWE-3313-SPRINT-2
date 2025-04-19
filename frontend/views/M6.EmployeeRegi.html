@@ -45,6 +45,7 @@
     <div class="form-wrapper">
       <h2>Edit or Delete Employee</h2>
       <select id="existing-employees"></select>
+      <input type="text" id="edit-username" placeholder="New Username (optional)">
       <input type="text" id="edit-fullname" placeholder="Full Name (optional)">
       <input type="password" id="edit-password" placeholder="New Password (optional)">
       <select id="edit-role">
@@ -84,9 +85,11 @@
         const role = document.getElementById("edit-role").value;
         const password = document.getElementById("edit-password").value;
         const fullname = document.getElementById("edit-fullname").value;
-        const body = { UserName: selected, Role: role };
+        const username = document.getElementById("edit-username").value;
+        const body = { EmployeeID: selected, Role: role };
         if (password) body.Password = password;
         if (fullname) body.Name = fullname;
+        if (username) body.UserName = username;
 
         const res = await fetch("http://localhost:5000/api/manager/employees/update", {
           method: "POST",
@@ -103,7 +106,7 @@
         const res = await fetch("http://localhost:5000/api/manager/employees/delete", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ UserName: selected })
+          body: JSON.stringify({ EmployeeID: selected })
         });
         const msg = await res.json();
         document.getElementById("response").textContent = msg.message || "Employee deleted.";
@@ -161,8 +164,8 @@
         dropdown.innerHTML = "";
         data.forEach(emp => {
           const option = document.createElement("option");
-          option.value = emp.UserName;
-          option.text = `${emp.UserName} (${emp.Role})`;
+          option.value = emp.EmployeeID;
+          option.text = `${emp.EmployeeID} (${emp.UserName}, ${emp.Role})`;
           dropdown.appendChild(option);
         });
       }
