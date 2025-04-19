@@ -12,7 +12,7 @@
       grid-template-columns: repeat(6, 80px);
       gap: 12px;
       justify-content: center;
-      margin: 2rem auto;
+      margin: 4rem auto 2rem;
     }
     .table-cell {
       padding: 20px;
@@ -46,6 +46,13 @@
     .popup-content input, .popup-content select {
       width: 100%; margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;
     }
+    .top-row {
+      margin-top: 2rem;
+    }
+    h2.title {
+      margin-top: 6rem;
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -60,7 +67,7 @@
     <div class="tab"><a href="M7.ClockInHistory.html"><h2>Clock-In History</h2></a></div>
   </div>
 
-  <h2 style="text-align: center;">Manage Restaurant Tables</h2>
+  <h2 class="title">Manage Restaurant Tables</h2>
   <div class="table-grid" id="table-grid"></div>
 
   <div id="popup" class="popup hidden">
