@@ -80,19 +80,9 @@
         <option value="Reserved">Reserved</option>
       </select>
       <label for="popup-waiter">Waiter ID:</label>
-      <select id="popup-waiter">
-        <option value="EMP101">EMP101</option>
-        <option value="EMP102">EMP102</option>
-        <option value="EMP103">EMP103</option>
-        <option value="EMP104">EMP104</option>
-        <option value="EMP105">EMP105</option>
-      </select>
+      <select id="popup-waiter"></select>
       <label for="popup-busboy">Busboy ID:</label>
-      <select id="popup-busboy">
-        <option value="EMP201">EMP201</option>
-        <option value="EMP202">EMP202</option>
-        <option value="EMP203">EMP203</option>
-      </select>
+      <select id="popup-busboy"></select>
       <div style="margin-top: 1rem;">
         <button onclick="confirmPopup()">✔ Confirm</button>
         <button onclick="closePopup()">✖ Cancel</button>
@@ -102,6 +92,8 @@
 
   <script>
     let currentTableId = null;
+    let waiters = [];
+    let busboys = [];
 
     async function fetchTables() {
       const res = await fetch("http://localhost:5000/api/tables");
@@ -121,6 +113,31 @@
 
         div.onclick = () => openPopup(table);
         grid.appendChild(div);
+      });
+    }
+
+    async function fetchEmployees() {
+      const res = await fetch("http://localhost:5000/api/manager/employees");
+      const data = await res.json();
+      waiters = data.filter(e => e.Role.toLowerCase() === "waiter");
+      busboys = data.filter(e => e.Role.toLowerCase() === "busboy");
+
+      const waiterSelect = document.getElementById("popup-waiter");
+      waiterSelect.innerHTML = "";
+      waiters.forEach(w => {
+        const opt = document.createElement("option");
+        opt.value = w.EmployeeID;
+        opt.textContent = `${w.EmployeeID} (${w.UserName})`;
+        waiterSelect.appendChild(opt);
+      });
+
+      const busboySelect = document.getElementById("popup-busboy");
+      busboySelect.innerHTML = "";
+      busboys.forEach(b => {
+        const opt = document.createElement("option");
+        opt.value = b.EmployeeID;
+        opt.textContent = `${b.EmployeeID} (${b.UserName})`;
+        busboySelect.appendChild(opt);
       });
     }
 
@@ -163,7 +180,10 @@
       }
     }
 
-    window.onload = fetchTables;
+    window.onload = async () => {
+      await fetchEmployees();
+      fetchTables();
+    };
   </script>
 </body>
 </html>
