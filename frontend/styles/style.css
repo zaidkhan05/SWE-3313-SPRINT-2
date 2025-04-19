@@ -1,9 +1,9 @@
-/*Screen Backgrounds*/
+/* Screen Backgrounds */
 body {
     background: #eee6deff;
 }
 
-/*Used for titles*/
+/* Used for titles */
 h1 {
     font-family: 'Oswald';
     text-align: center;
@@ -12,11 +12,8 @@ h1 {
     text-decoration: underline;
 }
 
-/*h2 can still be used for something*/
-
-
-/*Used for tab names*/
-h3 {
+/* Used for tab names */
+h2 {
     font-family: 'Oswald';
     text-align: center;
     align-items: center;
@@ -26,7 +23,14 @@ h3 {
     font-weight: 575;
 }
 
-/*Used for pop-up notifications*/
+/* Used for Column Names */
+h3 {
+    font-family: 'Oswald';
+    color:#000000;
+    text-decoration: underline;
+}
+
+/* Used for pop-up notifications */
 h4 {
     font-family: 'Oswald';
     text-align: center;
@@ -36,11 +40,12 @@ h4 {
     font-weight: bold;
 }
 
-/*".root", ".top-row", ".selectedTab", and ".tab" are needed for the top row of tab buttons*/
+
+
+/* ".root", ".top-row", ".selectedTab", and ".tab" are needed for the top row of tab buttons */
 :root {
     --box-height: 100px;
 }
-
 .top-row {
     display: flex;
     width: 100%;
@@ -51,13 +56,11 @@ h4 {
     background-color: #f0f0f0;
     height: var(--box-height);
 }
-
 .selectedTab {
     flex: 1;
     height: 100%;
     background-color: #eee6deff;
 }
-
 .tab {
     flex: 1;
     height: 100%;
@@ -65,90 +68,9 @@ h4 {
     border: 1px solid #595959;
 }
 
-/*Needed for pop-ups*/
-.modal {
-    display:none ;
-    position: fixed; 
-    
-    bottom: 150;
-    width: 100%;
-    height: 100%;
-    
-    /* SAVE FOR LATER WHEN NEEDED IN ORDERS */
-    /*background-color: rgba(0, 0, 0, 0.5);*/ /*Black background with opacity */
-}
 
-/* The modal content box */
-.modal-content {
-    font-family: 'Oswald';
-    background-color: #999999ff;
-    margin: 15% auto;
-    padding: 0;
-    border: 1px solid #888;
-    width: 90%;
-    max-width: 500px;
 
-    overflow: hidden; /* ensures buttons stay flush */
-    display: flex;
-    flex-direction: column;
-}
-  
-.modal-body {
-    padding: 20px;
-    text-align: center;
-}
-  
-.modal-buttons {
-    display: flex;
-    width: 100%;
-    height: 50px;
-}
-  
-.modal-buttons button {
-    flex: 1;
-    border: none;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    padding: 0;
-}
-  
-.back-button {
-    background-color: rgb(255, 77, 77);
-    border-right: 1px solid #aaa;
-}
-  
-.back-button:hover {
-    background-color: rgb(255, 43, 43);
-}
-  
-.confirm-button {
-    background-color: #4CAF50;
-    color: white;
-}
-  
-.confirm-button:hover {
-    background-color: #45a049;
-}
-
-.logoutButton {
-    width: 300px;
-    height: 150px;
-    background-color: #999999ff;
-    
-    position: absolute;
-    bottom: 150px;
-    right: 50px;
-    border: 2px solid #595959;
-    padding: 10px;
-
-    font-family: 'Oswald';
-    text-align: center;
-    font-size: 52px;
-}
-
-/*Orders table and button*/
+/* Orders table and button */
 .container {
     display: flex;
     justify-content: center;
@@ -156,41 +78,50 @@ h4 {
 }
   
 table {
+    font-family: 'Oswald';
+    font-size: 20px;
+    color: #412527;
+    background-color: #ffefc2ff;
     border-collapse: collapse;
     width: 90%;
-    max-width: 900px;
-    background-color: white;
+    max-width: 1200px;
 }
   
 th, td {
-    border: 1px solid #ddd;
+    border: none;
     padding: 12px 16px;
     text-align: left;
 }
-  
+
 th {
-    background-color: #f4f4f4;
+    font-family: 'Oswald';
+    font-size: 20px;
+    background-color: white;
 }
 
-.order-box {
-    width: 25%;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border: 2px solid #ccc;
+thead th {
     text-align: center;
-    height: fit-content;
+    background-color: #eee6deff;
 }
 
-.order-box button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
+/* Remove background color from the last column cells */
+thead th:last-child {
+    background-color: #eee6deff;
+}
+tbody td:last-child {
+    background-color: #eee6deff;
+}
+  
+/* "Order" button settings */
+button.order-btn {
+    font-family: 'Oswald';
+    font-size: 20px;
+    background-color: #412527ff;
+    color: #ffefc2;
     border: none;
-    border-radius: 6px;
+    padding: 6px 12px;
     cursor: pointer;
 }
-
-.order-box button:hover {
-    background-color: #45a049;
+button.order-btn:hover {
+    background-color: rgb(31, 17, 18);
 }

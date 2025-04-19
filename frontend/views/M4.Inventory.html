@@ -7,52 +7,216 @@
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/M0.Style.css">
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+
+    <!-- Pop-up style ONLY FOR INVENTORY -->
+    <style>
+      /* Needed for pop-ups */
+      .modal {
+          display: none;
+          justify-content: center;
+          align-items: center; 
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          position: fixed;
+          bottom: 150;
+          
+          /* SAVE FOR LATER WHEN NEEDED IN ORDERS */
+          /*background-color: rgba(0, 0, 0, 0.5);*/ /*Black background with opacity */
+      }
+      /* The modal content box */
+      .modal-content {
+          font-family: 'Oswald';
+          background-color: #999999ff;
+          padding: 0;
+          border: 1px solid #888;
+          width: 90%;
+          max-width: 500px;
+
+          overflow: hidden; /* ensures buttons stay flush */
+          display: flex;
+          flex-direction: column;
+      }
+        
+      .modal-body {
+          padding: 20px;
+          text-align: center;
+      }
+        
+      .modal-buttons {
+          display: flex;
+          width: 100%;
+          height: 50px;
+      }
+        
+      .modal-buttons button {
+          flex: 1;
+          border: none;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          padding: 0;
+      }
+        
+      .back-button {
+          background-color: rgb(255, 77, 77);
+          border-right: 1px solid #aaa;
+      }
+        
+      .back-button:hover {
+          background-color: rgb(255, 43, 43);
+      }
+        
+      .confirm-button {
+          background-color: #4CAF50;
+          color: white;
+      }
+        
+      .confirm-button:hover {
+          background-color: #45a049;
+      }
+    </style>  
+
   </head>
 
   <body>
+    <!-- 85-127 Tab selection at the top -->
     <div class="top-row">
 
       <div class="tab">
         <a href="M1.TableView.html">
-            <h3>Table View</h3>
+            <h2>Table View</h2>
         </a>
       </div>
 
       <div class="tab">
         <a href="M2.Orders.html">
-          <h3>Orders</h3>
+          <h2>Orders</h2>
         </a>
       </div>
 
       <div class="tab">
         <a href="M3.OrderHistory.html">
-            <h3>Order History</h3>
+            <h2>Order History</h2>
         </a>
       </div>
 
       <div class="selectedTab">
-        <h3>Inventory</h3>
+        <h2>Inventory</h2>
       </div>
 
       <div class="tab">
         <a href="M5.Analytics.html">
-          <h3>Analytics</h3>
+          <h2>Analytics</h2>
         </a>
       </div>
 
       <div class="tab">
         <a href="M6.EmployeeRegi.html">
-          <h3>Employee Regi.</h3>
+          <h2>Employee Regi.</h2>
         </a>
       </div>
 
       <div class="tab">
         <a href="M7.ClockInHistory.html">
-          <h3>Clock-In History</h3>
+          <h2>Clock-In History</h2>
         </a>
       </div>
 
     </div>
+
+    <!-- List of inventory items -->
+    <div class="container">
+      <table>
+
+        <thead>
+          <tr>
+            <th><h3>Item Name</h3></th>
+            <th><h3>Category</h3></th>
+            <th><h3>Current Stock</h3></th>
+            <th><h3>Times Ordered</h3></th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          
+          <tr>
+            <td>Tomatoes</td>
+            <td>Produce</td>
+            <td class="stock">120</td>
+            <td class="times">45</td>
+            <td><button class="order-btn" onclick="openOrderModal(this)">Order</button></td>
+          </tr>
+
+          <tr>
+            <td>Burger Buns</td>
+            <td>Bakery</td>
+            <td class="stock">60</td>
+            <td class="times">110</td>
+            <td><button class="order-btn" onclick="openOrderModal(this)">Order</button></td>
+          </tr>
+
+          <tr>
+            <td>Cheddar Cheese</td>
+            <td>Dairy</td>
+            <td class="stock">35</td>
+            <td class="times">72</td>
+            <td><button class="order-btn" onclick="openOrderModal(this)">Order</button></td>
+          </tr>
+
+          <!-- Add more rows as needed -->
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <!-- Order item pop-up verification -->
+    <div id="orderModal" class="modal">
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <p>Confirm order for <span id="itemNamePlaceholder">Item</span>?</p>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="back-button" onclick="closeOrderModal()">Back</button>
+          <button class="confirm-button" onclick="confirmOrder()">Confirm</button>
+        </div>
+        
+      </div>
+    </div>
+
+    <script>
+      
+      let currentRow = null;
+
+      function openOrderModal(button) {
+        currentRow = button.closest("tr");
+        const itemName = currentRow.querySelector("td").textContent;
+        document.getElementById("itemNamePlaceholder").textContent = itemName;
+        document.getElementById("orderModal").style.display = "block";
+      }
+
+      function closeOrderModal() {
+        document.getElementById("orderModal").style.display = "none";
+      }
+
+      function confirmOrder() {
+        const stockCell = currentRow.querySelector(".stock");
+        const timesCell = currentRow.querySelector(".times");
+
+        stockCell.textContent = parseInt(stockCell.textContent) + 1;
+        timesCell.textContent = parseInt(timesCell.textContent) + 1;
+
+        closeOrderModal();
+      }
+
+    </script>
+
   </body>
 
 </html>
