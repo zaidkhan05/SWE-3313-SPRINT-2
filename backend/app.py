@@ -174,15 +174,25 @@ def manager_add_employee():
 def manager_update_employee():
     data = request.json
     users = load_csv(USERS_FILE, ["UserName", "Password", "EmployeeID", "Role", "Clock_In_Time", "Clock_Out_Time"])
-    if data["UserName"] not in users["UserName"].values:
+
+    # Identify by UserName or EmployeeID
+    match = pd.DataFrame()
+    if "UserName" in data:
+        match = users[users["UserName"] == data["UserName"]]
+    elif "EmployeeID" in data:
+        match = users[users["EmployeeID"] == data["EmployeeID"]]
+
+    if match.empty:
         return jsonify({"success": False, "message": "User not found."}), 404
 
-    for col in ["Password", "Role", "EmployeeID"]:
+    idx = match.index[0]
+    for col in ["UserName", "Password", "Role", "EmployeeID"]:
         if col in data:
-            users.loc[users["UserName"] == data["UserName"], col] = data[col]
+            users.at[idx, col] = data[col]
 
     save_csv(users, USERS_FILE)
     return jsonify({"success": True, "message": "User updated successfully."})
+
 
 @app.route("/api/manager/employees/delete", methods=["POST"])
 def manager_delete_employee():
