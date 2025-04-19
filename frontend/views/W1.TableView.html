@@ -1,61 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Waiter Dashboard - Table View</title>
-    <link rel="stylesheet" href="../styles/style.css">
-    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+<head>
+  <meta charset="UTF-8">
+  <title>Waiter Dashboard - Table View</title>
+  <link rel="stylesheet" href="../styles/style.css">
+  <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
 
-    <style>
-      .table-grid {
-        display: grid;
-        grid-template-columns: repeat(6, 80px);
-        gap: 12px;
-        justify-content: center;
-        margin: 2rem auto;
-      }
+  <style>
+    .table-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 80px);
+      gap: 12px;
+      justify-content: center;
+      margin: 2rem auto;
+    }
 
-      .table-cell {
-        padding: 20px;
-        border-radius: 8px;
-        font-weight: bold;
-        color: white;
-        text-align: center;
-      }
+    .table-cell {
+      padding: 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+      cursor: pointer;
+    }
 
-      .Available { background-color: #4CAF50; }
-      .Occupied { background-color: #f44336; }
-      .Reserved { background-color: #ff9800; }
-    </style>
-  </head>
+    .Available { background-color: #4CAF50; }
+    .Occupied { background-color: #f44336; }
+    .Reserved { background-color: #ff9800; }
+  </style>
+</head>
 
-  <body>
-    <div class="top-row">
-      <div class="selectedTab"><h2>Table View</h2></div>
-      <div class="tab"><a href="W2.Orders.html"><h2>Orders</h2></a></div>
-      <div class="tab"><a href="W3.ClockInHistory.html"><h2>Clock In History</h2></a></div>
-    </div>
+<body>
+  <div class="top-row">
+    <div class="selectedTab"><h2>Table View</h2></div>
+    <div class="tab"><a href="W2.Orders.html"><h2>Orders</h2></a></div>
+    <div class="tab"><a href="W3.ClockInHistory.html"><h2>Clock In History</h2></a></div>
+  </div>
 
-    <h2 style="text-align: center;">Restaurant Table View</h2>
-    <div class="table-grid" id="table-grid"></div>
+  <h2 style="text-align: center;">Restaurant Table View</h2>
+  <div class="table-grid" id="table-grid"></div>
 
-    <script>
-      async function fetchTables() {
-        const res = await fetch("http://localhost:5000/api/tables");
-        const tables = await res.json();
+  <script>
+    async function fetchTables() {
+      const res = await fetch("http://localhost:5000/api/tables");
+      const tables = await res.json();
 
-        const grid = document.getElementById("table-grid");
-        grid.innerHTML = "";
+      const grid = document.getElementById("table-grid");
+      grid.innerHTML = "";
 
-        tables.forEach(table => {
-          const div = document.createElement("div");
-          div.className = `table-cell ${table.Status}`;
-          div.innerText = table.TableID;
-          grid.appendChild(div);
-        });
-      }
+      tables.forEach(table => {
+        const div = document.createElement("div");
+        div.className = `table-cell ${table.Status}`;
+        div.innerText = table.TableID;
 
-      window.onload = fetchTables;
-    </script>
-  </body>
+        // Add click handler for status update
+        div.onclick = async () => {
+          const newStatus = prompt(`Set new status for ${table.TableID} (Available, Occupied, Reserved):`, table.Status);
+          if (!newStatus || !["Available", "Occupied", "Reserved"].includes(newStatus)) return;
+
+          const updateRes = await fetch("http://localhost:5000/api/tables/update", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ TableID: table.TableID, Status: newStatus })
+          });
+
+          const result = await updateRes.json();
+          if (result.success) {
+            fetchTables(); // Refresh after update
+          } else {
+            alert("Error updating table.");
+          }
+        };
+
+        grid.appendChild(div);
+      });
+    }
+
+    window.onload = fetchTables;
+  </script>
+</body>
 </html>
