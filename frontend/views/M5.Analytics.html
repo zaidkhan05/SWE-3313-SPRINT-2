@@ -9,86 +9,6 @@
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
     
     <style>
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: 'Oswald', sans-serif;
-        padding: 40px;
-        background-color: #eee6deff;
-      }
-
-      .accordion-container {
-        width: 100%;
-        max-width: 1000px;
-        margin: 80px auto 0 auto;
-      }
-
-      .accordion {
-        font-family: 'Oswald';
-        font-size: 25px;
-        color: #6b3e37;
-        font-style: italic;
-        background-color: #ffefc2ff;
-        text-align: left;
-        border: 2px solid #000000;
-        outline: none;
-        cursor: pointer;
-        width: 100%;   
-        padding: 25px 30px;
-        margin-top: 10px;
-      }
-
-      .accordion:not(.month).active {
-        background-color: #ffefc2ff; /* ← replace with your desired color */
-      }
-      .accordion.month {
-        font-size: 20px;
-        font-style: none;
-        background-color: white;
-        padding: 20px 50px;
-        margin-top: 0;
-        border-top: 1px solid #ccc;
-      }
-
-      .accordion.month.active {
-        background-color: white;
-      }
-
-      .accordion.active, .accordion:hover {
-        background-color: rgb(216, 202, 165);
-      }
-
-      .panel {
-        font-style: none;
-        padding: 0;
-        background-color: #517366ff;
-        display: none;
-        overflow: hidden;
-        width: 100%;
-      }
-
-      .panel a {
-        font-family: 'Oswald';
-        font-size: 18px;
-        font-style: none;
-        font-weight: bold;
-        color: #ffefc2;
-        text-decoration: none;
-        display: block;
-        padding: 10px 70px;
-        border-bottom: 1px solid #ddd;
-      }
-
-      .panel a:last-child {
-        border-bottom: none;
-      }
-
-      .panel a:hover {
-        background-color: rgb(59, 83, 74);
-      }
-
       /* Needed for pop-ups */
       .modal {
           display: none;
@@ -344,15 +264,15 @@
 
     </div>
 
-    <!-- Date Confirmation Modal -->
+    <!-- Date Confirmation Pop-Up -->
     <div id="dateModal" class="modal">
       <div class="modal-content">
         <div class="modal-body" id="modalText">
           <!-- Date will be inserted dynamically -->
         </div>
         <div class="modal-buttons">
-          <button class="back-button" id="cancelBtn">Cancel</button>
-          <button class="confirm-button" id="confirmBtn">Confirm</button>
+          <button class="back-button" id="cancelBtn">Back</button>
+          <button class="confirm-button" id="confirmBtn">✓</button>
         </div>
       </div>
     </div>
@@ -418,11 +338,14 @@
           
           // Extract date path (year > month > day)
           const day = this.textContent.trim();
-          const month = this.closest(".panel").previousElementSibling.textContent.trim();
-          const year = this.closest(".accordion-container .panel").previousElementSibling.textContent.replace("-", "").trim();
+          const monthBtn = this.closest(".panel").previousElementSibling; // Month accordion
+          const month = monthBtn.textContent.trim();
+          const yearBtn = monthBtn.closest(".panel").previousElementSibling; // Year accordion
+          const year = yearBtn.textContent.replace("-", "").trim();
+
 
           selectedDate = `${year} - ${month} ${day}`;
-          modalText.innerText = `View analytics for ${selectedDate}?`;
+          modalText.innerHTML = `<h4>View analytics for ${selectedDate}?</h4>`;
           modal.style.display = "flex";
         });
       });
