@@ -1,5 +1,5 @@
 TableID,WaiterID,BusboyID,Status
-A1,EMP101,EMP201,Available
+A1,EMP101,EMP201,Occupied
 A2,EMP102,EMP202,Occupied
 A3,EMP103,EMP203,Reserved
 A4,EMP104,EMP201,Available
