@@ -41,6 +41,8 @@
   <div class="table-grid" id="table-grid"></div>
 
   <script>
+  let dropdownPanel = null;
+
   async function fetchTables() {
     const res = await fetch("http://localhost:5000/api/tables");
     const tables = await res.json();
@@ -55,13 +57,17 @@
       div.dataset.tableId = table.TableID;
       div.dataset.status = table.Status;
 
-      div.onclick = () => openStatusDropdown(div);
+      div.onclick = (e) => openStatusDropdown(div, e);
       grid.appendChild(div);
     });
   }
 
-  function openStatusDropdown(cell) {
-    const tableId = cell.dataset.tableId;
+  function openStatusDropdown(cell, event) {
+    // Remove any existing dropdown panel
+    if (dropdownPanel) dropdownPanel.remove();
+
+    dropdownPanel = document.createElement("div");
+    dropdownPanel.className = "dropdown-panel";
 
     const dropdown = document.createElement("select");
     ["Available", "Occupied", "Reserved"].forEach(status => {
@@ -74,32 +80,48 @@
 
     const confirmBtn = document.createElement("button");
     confirmBtn.textContent = "✔";
+    confirmBtn.style.marginLeft = "10px";
     confirmBtn.onclick = async (e) => {
-      e.stopPropagation(); // prevent re-click
+      e.stopPropagation(); // prevent dropdown from re-triggering
       const newStatus = dropdown.value;
 
       const res = await fetch("http://localhost:5000/api/tables/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ TableID: tableId, Status: newStatus })
+        body: JSON.stringify({ TableID: cell.dataset.tableId, Status: newStatus })
       });
 
       const result = await res.json();
       if (result.success) {
+        dropdownPanel.remove();
+        dropdownPanel = null;
         fetchTables();
       } else {
         alert("Error updating table.");
       }
     };
 
-    // Clear and show controls
-    cell.innerHTML = "";
-    cell.appendChild(dropdown);
-    cell.appendChild(confirmBtn);
+    dropdownPanel.appendChild(dropdown);
+    dropdownPanel.appendChild(confirmBtn);
+    document.body.appendChild(dropdownPanel);
+
+    // Position it near the clicked cell
+    const rect = cell.getBoundingClientRect();
+    dropdownPanel.style.left = `${rect.right + 10}px`;
+    dropdownPanel.style.top = `${rect.top}px`;
   }
+
+  // Close dropdown if clicking outside
+  document.addEventListener("click", (e) => {
+    if (dropdownPanel && !dropdownPanel.contains(e.target)) {
+      dropdownPanel.remove();
+      dropdownPanel = null;
+    }
+  });
 
   window.onload = fetchTables;
 </script>
+
 
 </body>
 </html>
