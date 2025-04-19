@@ -149,7 +149,9 @@ def update_table_status():
 @app.route("/api/manager/employees", methods=["GET"])
 def manager_get_employees():
     users = load_csv(USERS_FILE, ["UserName", "Password", "EmployeeID", "Role", "Clock_In_Time", "Clock_Out_Time"])
-    return users.to_dict(orient="records")
+    users = users.where(pd.notnull(users), None)  
+    return jsonify(users.to_dict(orient="records"))  
+
 
 @app.route("/api/manager/employees", methods=["POST"])
 def manager_add_employee():
