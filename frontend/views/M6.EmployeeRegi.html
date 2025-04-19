@@ -29,7 +29,7 @@
     </div>
 
     <div class="form-wrapper">
-      <h2>Register or Update Employee</h2>
+      <h2>Register New Employee</h2>
       <input type="text" id="username" placeholder="Username" required>
       <input type="password" id="password" placeholder="Password" required>
       <input type="text" id="employee_id" placeholder="Employee ID" required>
@@ -40,18 +40,21 @@
         <option value="Manager">Manager</option>
       </select>
       <button onclick="registerEmployee()">Register</button>
-      <button onclick="updateEmployee()">Update</button>
       <p id="response"></p>
     </div>
 
     <div class="form-wrapper">
-      <h2>Current Employees</h2>
-      <table>
-        <thead>
-          <tr><th>Username</th><th>Role</th><th>Employee ID</th><th>Action</th></tr>
-        </thead>
-        <tbody id="employee-list"></tbody>
-      </table>
+      <h2>Update or Delete Existing Employee</h2>
+      <select id="existing-employees"></select>
+      <input type="password" id="edit-password" placeholder="New Password (optional)">
+      <select id="edit-role">
+        <option value="Waiter">Waiter</option>
+        <option value="Chef">Chef</option>
+        <option value="Busboy">Busboy</option>
+        <option value="Manager">Manager</option>
+      </select>
+      <button onclick="updateEmployee()">Update</button>
+      <button onclick="deleteSelectedEmployee()">Delete</button>
     </div>
 
     <div class="form-wrapper">
@@ -77,25 +80,31 @@
       }
 
       async function updateEmployee() {
-        const data = getFormData();
+        const selected = document.getElementById("existing-employees").value;
+        const role = document.getElementById("edit-role").value;
+        const password = document.getElementById("edit-password").value;
+        const body = { UserName: selected, Role: role };
+        if (password) body.Password = password;
+
         const res = await fetch("http://localhost:5000/api/manager/employees/update", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
+          body: JSON.stringify(body)
         });
         const msg = await res.json();
         document.getElementById("response").textContent = msg.message || "Employee updated.";
         fetchEmployees();
       }
 
-      async function deleteEmployee(username) {
+      async function deleteSelectedEmployee() {
+        const selected = document.getElementById("existing-employees").value;
         const res = await fetch("http://localhost:5000/api/manager/employees/delete", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ UserName: username })
+          body: JSON.stringify({ UserName: selected })
         });
         const msg = await res.json();
-        document.getElementById("response").textContent = msg.message || "Employee removed.";
+        document.getElementById("response").textContent = msg.message || "Employee deleted.";
         fetchEmployees();
       }
 
@@ -131,21 +140,15 @@
 
       async function fetchEmployees() {
         try {
-          console.log("Fetching employee list...");
           const res = await fetch("http://localhost:5000/api/manager/employees");
           const data = await res.json();
-          console.log("Received employees:", data);
-
-          const tbody = document.getElementById("employee-list");
-          tbody.innerHTML = "";
+          const dropdown = document.getElementById("existing-employees");
+          dropdown.innerHTML = "";
           data.forEach(emp => {
-            const row = `<tr>
-              <td>${emp.UserName}</td>
-              <td>${emp.Role}</td>
-              <td>${emp.EmployeeID}</td>
-              <td><button onclick=\"deleteEmployee('${emp.UserName}')\">Delete</button></td>
-            </tr>`;
-            tbody.innerHTML += row;
+            const option = document.createElement("option");
+            option.value = emp.UserName;
+            option.text = `${emp.UserName} (${emp.Role})`;
+            dropdown.appendChild(option);
           });
         } catch (err) {
           console.error("Error fetching employees:", err);
