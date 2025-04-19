@@ -29,6 +29,7 @@
     <div class="form-wrapper">
       <h2>Register New Employee</h2>
       <input type="text" id="username" placeholder="Username" required>
+      <input type="text" id="fullname" placeholder="Full Name" required>
       <input type="password" id="password" placeholder="Password" required>
       <input type="text" id="employee_id" placeholder="Employee ID" required>
       <select id="role">
@@ -44,6 +45,7 @@
     <div class="form-wrapper">
       <h2>Edit or Delete Employee</h2>
       <select id="existing-employees"></select>
+      <input type="text" id="edit-fullname" placeholder="Full Name (optional)">
       <input type="password" id="edit-password" placeholder="New Password (optional)">
       <select id="edit-role">
         <option value="Waiter">Waiter</option>
@@ -81,8 +83,10 @@
         const selected = document.getElementById("existing-employees").value;
         const role = document.getElementById("edit-role").value;
         const password = document.getElementById("edit-password").value;
+        const fullname = document.getElementById("edit-fullname").value;
         const body = { UserName: selected, Role: role };
         if (password) body.Password = password;
+        if (fullname) body.Name = fullname;
 
         const res = await fetch("http://localhost:5000/api/manager/employees/update", {
           method: "POST",
@@ -130,6 +134,7 @@
       function getFormData() {
         return {
           UserName: document.getElementById("username").value,
+          Name: document.getElementById("fullname").value,
           Password: document.getElementById("password").value,
           EmployeeID: document.getElementById("employee_id").value,
           Role: document.getElementById("role").value
@@ -166,6 +171,5 @@
         fetchEmployees();
       };
     </script>
-
   </body>
 </html>
