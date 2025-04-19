@@ -137,24 +137,29 @@
       }
 
       async function fetchEmployees() {
+        console.log("Fetching employees...");
+        const res = await fetch("http://localhost:5000/api/manager/employees");
+        const text = await res.text();
+        console.log("Raw response:", text);
+
         try {
-          console.log("Fetching employees...");
-          const res = await fetch("http://localhost:5000/api/manager/employees");
-          const data = await res.json();
-          console.log("Received employees:", data);
-
-          const dropdown = document.getElementById("existing-employees");
-          dropdown.innerHTML = "";
-
-          data.forEach(emp => {
-            const option = document.createElement("option");
-            option.value = emp.UserName;
-            option.text = `${emp.UserName} (${emp.Role})`;
-            dropdown.appendChild(option);
-          });
+          const data = JSON.parse(text);
+          console.log("Parsed JSON:", data);
+          populateDropdown(data);
         } catch (err) {
-          console.error("Error fetching employees:", err);
+          console.error("❌ JSON parse error:", err.message);
         }
+      }
+
+      function populateDropdown(data) {
+        const dropdown = document.getElementById("existing-employees");
+        dropdown.innerHTML = "";
+        data.forEach(emp => {
+          const option = document.createElement("option");
+          option.value = emp.UserName;
+          option.text = `${emp.UserName} (${emp.Role})`;
+          dropdown.appendChild(option);
+        });
       }
 
       window.onload = () => {
