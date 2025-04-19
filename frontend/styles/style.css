@@ -108,3 +108,13 @@ h4 {
 .confirm-button:hover {
     background-color: #45a049;
 }
+
+.dropdown-panel {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1000;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
