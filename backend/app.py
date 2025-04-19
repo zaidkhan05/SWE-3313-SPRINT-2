@@ -185,37 +185,22 @@ def manager_update_employee():
     if match.empty:
         return jsonify({"success": False, "message": "User not found."}), 404
 
-    # Remove old entry
-    users = users.drop(match.index)
+    idx = match.index[0]
+    for col in ["UserName", "Password", "Role", "EmployeeID"]:
+        if col in data:
+            users.at[idx, col] = data[col]
 
-    # Create updated entry with original Clock_In/Out if not supplied
-    updated = {
-        "UserName": data.get("UserName", match.iloc[0]["UserName"]),
-        "Password": data.get("Password", match.iloc[0]["Password"]),
-        "EmployeeID": data.get("EmployeeID", match.iloc[0]["EmployeeID"]),
-        "Role": data.get("Role", match.iloc[0]["Role"]),
-        "Clock_In_Time": data.get("Clock_In_Time", match.iloc[0].get("Clock_In_Time", "")),
-        "Clock_Out_Time": data.get("Clock_Out_Time", match.iloc[0].get("Clock_Out_Time", ""))
-    }
-
-    # Append the updated record
-    users = pd.concat([users, pd.DataFrame([updated])], ignore_index=True)
     save_csv(users, USERS_FILE)
-
     return jsonify({"success": True, "message": "User updated successfully."})
+
 
 @app.route("/api/manager/employees/delete", methods=["POST"])
 def manager_delete_employee():
     data = request.json
     users = load_csv(USERS_FILE, ["UserName", "Password", "EmployeeID", "Role", "Clock_In_Time", "Clock_Out_Time"])
-
-    if "UserName" in data:
-        users = users[users["UserName"] != data["UserName"]]
-    elif "EmployeeID" in data:
-        users = users[users["EmployeeID"] != data["EmployeeID"]]
-    else:
-        return jsonify({"success": False, "message": "Missing identifier."}), 400
-
+    if data["UserName"] not in users["UserName"].values:
+        return jsonify({"success": False, "message": "User not found."}), 404
+    users = users[users["UserName"] != data["UserName"]]
     save_csv(users, USERS_FILE)
     return jsonify({"success": True, "message": "User removed successfully."})
 
