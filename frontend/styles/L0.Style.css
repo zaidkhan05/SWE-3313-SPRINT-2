@@ -14,10 +14,46 @@ h1 {
     text-align: center;
 }
 
+h7 {
+    font-family: 'Oswald';
+    font-size: 30px;
+    text-decoration: none;
+}
+.content-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#login-form {
+    z-index: 1; /* make sure it's on top */
+}
+
+.hours {
+    position: absolute;
+    right: 5%;
+    top: 0;
+    background: #eee6deff;
+    padding: 1.5rem;
+    font-size: 1rem;
+    max-width: 250px;
+}
+
+.hours h7 {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+
+ul {
+    padding-left: 1.25rem;
+}
+
 form {
     background: #eee6deff;
     padding: 2rem;
-    border-radius: 10px;
     width: 300px;    
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     display: flex;
