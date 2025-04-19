@@ -193,3 +193,8 @@ def manager_delete_employee():
     users = users[users["UserName"] != data["UserName"]]
     save_csv(users, USERS_FILE)
     return jsonify({"success": True, "message": "User removed successfully."})
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
