@@ -208,9 +208,14 @@ def manager_update_employee():
 def manager_delete_employee():
     data = request.json
     users = load_csv(USERS_FILE, ["UserName", "Password", "EmployeeID", "Role", "Clock_In_Time", "Clock_Out_Time"])
-    if data["UserName"] not in users["UserName"].values:
-        return jsonify({"success": False, "message": "User not found."}), 404
-    users = users[users["UserName"] != data["UserName"]]
+
+    if "UserName" in data:
+        users = users[users["UserName"] != data["UserName"]]
+    elif "EmployeeID" in data:
+        users = users[users["EmployeeID"] != data["EmployeeID"]]
+    else:
+        return jsonify({"success": False, "message": "Missing identifier."}), 400
+
     save_csv(users, USERS_FILE)
     return jsonify({"success": True, "message": "User removed successfully."})
 
