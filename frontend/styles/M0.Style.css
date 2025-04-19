@@ -1,3 +1,4 @@
+/* Style for tabs */
 .tab a {
     flex: inherit;
     height: inherit;
@@ -8,7 +9,8 @@
     margin: 0;
 }
 
-h3 a {
+/*  */
+h2 a {
     font-family: inherit;
     text-align: inherit;
     align-items: inherit;
