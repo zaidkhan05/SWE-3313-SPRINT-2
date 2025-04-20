@@ -122,6 +122,7 @@
 
       async function confirmPopup() {
         const newStatus = document.getElementById("popup-status").value;
+
         const res = await fetch("http://localhost:5000/api/tables/update", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -132,10 +133,17 @@
         if (result.success) {
           closePopup();
           fetchTables();
+
+          if (newStatus === "Occupied") {
+            // Redirect to the menu page
+            window.location.href = "W4.Menu.Appetizers.html";
+          }
+
         } else {
           alert("Failed to update table.");
         }
       }
+
 
       window.onload = fetchTables;
     </script>
