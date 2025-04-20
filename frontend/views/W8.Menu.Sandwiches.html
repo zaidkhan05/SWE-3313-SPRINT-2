@@ -24,6 +24,39 @@
         <div class="tab wide-tab"><h2>Table Order</h2></div>
     </div>
     
+    <div class = "backButton" onclick="openModal()">
+        ←
+    </div>
+  
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h4>Would you like to exit the menu?</h4>
+          </div>
+        
+          <div class="modal-buttons">
+            <button class="back-button" onclick="closeModal()">Back</button>
+            <button class="confirm-button" onclick="confirmClockOut()">✓</button>
+          </div>
+        </div>
+    </div>
+        
+    <script>
+  
+        function openModal() {
+          document.getElementById("myModal").style.display = "block";
+        }
+  
+        function closeModal() {
+          document.getElementById("myModal").style.display = "none";
+        }
+  
+        function confirmClockOut() {
+          window.location.href = "W1.TableView.html";
+        }
+        
+    </script>
+
   </body>
 
 </html>

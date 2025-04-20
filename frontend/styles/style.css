@@ -67,21 +67,37 @@ h4 {
     background-color: #e4cc89ff;
     border: 1px solid #595959;
 }
-.wide-tab {
-    flex: 2; /* Makes it wider than the others */
-    position: relative; /* Needed for the pseudo-element */
-    z-index: 1; /* Keeps it above background extensions */
+.wide-tab {     /* Used for the menu screen's "Table Order" tab */
+    flex: 2;
+    position: relative;
+    z-index: 1;
 }
-
-.wide-tab::after {
+.wide-tab::after {      /* Might remove if unable to write inside */
     content: "";
     position: fixed;
-    top: var(--box-height); /* Start just below the top row */
-    right: 0;
-    width: calc(100vw * 2 / 8); /* Match .wide-tab width (2 out of 8 flex units) */
+    top: var(--box-height);
+    right: 2;
+    width: calc(100vw * 2 / 8);
     height: calc(100vh - var(--box-height));
-    background-color: #e4cc89ff; /* Same as tab background */
-    z-index: -1; /* Pushes it behind the actual tab */
+    background-color: #e4cc89ff;
+    z-index: -1;
+}
+.backButton {       /* Bottom left "Back" button */
+    font-family: 'Oswald';
+    font-size: 90px;
+    font-weight: bold;
+    color: #517366ff;
+    background-color: #ffefc2ff;
+    text-align: center;
+
+    width: 200px;
+    height: 150px;
+    
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    border: 2px solid #595959;
+    padding: 10px;
 }
 
 
@@ -175,5 +191,18 @@ h3.title {
     background-color: #45a049;
 }
 
+.logoutButton {
+    font-family: 'Oswald';
+    font-size: 52px;
+    background-color: #999999ff;
+    text-align: center;
 
-
+    width: 300px;
+    height: 150px;
+    
+    position: absolute;
+    bottom: 150px;
+    right: 50px;
+    border: 2px solid #595959;
+    padding: 10px;
+}
