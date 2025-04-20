@@ -101,10 +101,12 @@
           </tr>
         </thead>
 
+        <!-- OLD ROWS -->
+        <!--
         <tbody>
           
           <tr>
-            <td>Ketchup bottles</td>
+            <td>Ketchup</td>
             <td>Sauce</td>
             <td class="stock">50</td>
             <td class="times">12</td>
@@ -112,7 +114,7 @@
           </tr>
 
           <tr>
-            <td>Garlic bread &#40bags&#41</td>
+            <td>Garlic Bread</td>
             <td>Grain</td>
             <td class="stock">40</td>
             <td class="times">24</td>
@@ -159,7 +161,14 @@
             <td><button class="order-btn" onclick="openOrderModal(this)">Order</button></td>
           </tr>
 
-          <!-- Add more rows as needed -->
+          Add more rows as needed 
+          
+           
+        </tbody>
+        -->
+        
+        <tbody id="inventory-body">
+          <!-- JS will populate rows here -->
         </tbody>
 
       </table>
@@ -183,30 +192,77 @@
     </div>
 
     <script>
-      
       let currentRow = null;
+    
+      function loadInventory() {
+        fetch("http://localhost:5000/api/inventory")
+          .then(res => res.json())
+          .then(data => {
+            const tbody = document.getElementById("inventory-body");
+            tbody.innerHTML = ""; // clear existing
 
+            data.forEach(item => {
+              const row = document.createElement("tr");
+
+              row.innerHTML = `
+                <td>${item.ItemName}</td>
+                <td>${item.Category}</td>
+                <td class="stock">${item.CurrentStock}</td>
+                <td class="times">${item.TimesOrdered}</td>
+                <td><button class="order-btn" onclick="openOrderModal(this)">Order</button></td>
+              `;
+
+              tbody.appendChild(row);
+            });
+          })
+          .catch(err => {
+            console.error("Failed to load inventory:", err);
+          });
+      }
+
+      // Load inventory when page loads
+      window.onload = loadInventory;
+    
       function openOrderModal(button) {
         currentRow = button.closest("tr");
         const itemName = currentRow.querySelector("td").textContent;
         document.getElementById("itemNamePlaceholder").textContent = itemName;
         document.getElementById("orderModal").style.display = "flex";
       }
-
+    
       function closeOrderModal() {
         document.getElementById("orderModal").style.display = "none";
       }
-
+    
       function confirmOrder() {
-        const stockCell = currentRow.querySelector(".stock");
-        const timesCell = currentRow.querySelector(".times");
-
-        stockCell.textContent = parseInt(stockCell.textContent) + 1;
-        timesCell.textContent = parseInt(timesCell.textContent) + 1;
-
-        closeOrderModal();
+        const itemName = currentRow.querySelector("td").textContent;
+    
+        fetch("http://localhost:5000/api/inventory/order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ ItemName: itemName })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            // Update UI only if backend was successful
+            const stockCell = currentRow.querySelector(".stock");
+            const timesCell = currentRow.querySelector(".times");
+    
+            loadInventory();
+    
+            closeOrderModal();
+          } else {
+            alert("Error: " + data.message);
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Server error occurred.");
+        });
       }
-
     </script>
 
   </body>

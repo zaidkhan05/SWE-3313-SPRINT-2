@@ -1,8 +1,8 @@
 InventoryID,ItemName,Category,CurrentStock,TimesOrdered
-01,Ketchup,Sauce,50,12
-02,GarlicBread,Grain,40,24
-03,Spaghetti,Grain,30,30
-04,Cola,Beverages,57,46
-05,OrangeJuice,Beverages,59,37
-06,Tea,Beverages,43,30
-07,Chicken,Meat,34,45
+1,Ketchup,Sauce,50,12
+2,Garlic Bread,Grain,40,24
+3,Spaghetti,Grain,30,30
+4,Cola,Beverages,57,46
+5,Orange Juice,Beverages,59,37
+6,Tea,Beverages,43,30
+7,Chicken,Meat,34,45
