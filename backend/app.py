@@ -8,7 +8,14 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+import sys
+
+if getattr(sys, 'frozen', False):
+    base_path = sys._MEIPASS  # PyInstaller's temp unpack path
+else:
+    base_path = os.path.abspath(".")
+
+DATA_DIR = os.path.join(base_path, "data")
 USERS_FILE = os.path.join(DATA_DIR, "users.csv")
 ORDERS_FILE = os.path.join(DATA_DIR, "orders.csv")
 INVENTORY_FILE = os.path.join(DATA_DIR, "inventory.csv")
@@ -246,7 +253,7 @@ import webbrowser
 from threading import Timer
 
 def open_browser():
-    file_path = os.path.abspath("frontend/views/L1.UsernamePassword.html")
+    file_path = os.path.abspath("../frontend/views/L1.UsernamePassword.html")
     webbrowser.open(f"file:///{file_path}")
 
 if __name__ == "__main__":
