@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8"><title>Chef Dashboard - Clock-In History</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+
+    <style>
+        /* Needed for pop-ups */
+        .modal {
+            display:none ;
+            position: fixed; 
+            
+            bottom: 150;
+            width: 100%;
+            height: 100%;
+            
+            /* SAVE FOR LATER WHEN NEEDED IN ORDERS */
+            /*background-color: rgba(0, 0, 0, 0.5);*/ /*Black background with opacity */
+        }
+  
+        /* The modal content box */
+        .modal-content {
+            font-family: 'Oswald';
+            background-color: #999999ff;
+            margin: 15% auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+  
+            overflow: hidden; /* ensures buttons stay flush */
+            display: flex;
+            flex-direction: column;
+        }
+  
+      </style>
+
+  </head>
+
+  <body>
+
+    <div class="top-row">
+      <div class="tab"><a href="C1.Orders.html"><h2>Orders</h2></a></div>
+      <div class="tab"><a href="C2.OrderHistory.html"><h2>Order History</h2></a></div>
+      <div class="selectedTab"><h2>Clock-In History</h2></div>
+    </div>
+
+    <!-- "Sign Out/Clock Out" Button -->
+    <div class = "logoutButton" onclick="openModal()">
+        Sign Out/ Clock Out
+    </div>
+
+    <button onclick="openModal()">Open Popup</button>
+        
+    <!-- Sign Out pop-up verification -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+        <div class="modal-body">
+            <h4>Would you like to clock out for the day?</h4>
+        </div>
+        
+        <div class="modal-buttons">
+            <button class="back-button" onclick="closeModal()">Back</button>
+            <button class="confirm-button" onclick="confirmClockOut()">✓</button>
+        </div>
+        </div>
+    </div>
+
+    <script>
+
+        function openModal() {
+        document.getElementById("myModal").style.display = "block";
+        }
+
+        function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+        }
+
+        function confirmClockOut() {
+        window.location.href = "L1.UsernamePassword.html";
+        }
+        
+    </script>
+
+  </body>
+
+</html>
