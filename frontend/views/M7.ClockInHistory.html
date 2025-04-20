@@ -2,6 +2,7 @@
 <html lang="en">
 
   <head>
+
     <meta charset="UTF-8">
     <title>Manager Dashboard - Clock-In History</title>
     <link rel="stylesheet" href="../styles/style.css">
@@ -12,30 +13,84 @@
     <style>
       /* Needed for pop-ups */
       .modal {
-          display:none ;
-          position: fixed; 
-          
-          bottom: 150;
-          width: 100%;
-          height: 100%;
-          
-          /* SAVE FOR LATER WHEN NEEDED IN ORDERS */
-          /*background-color: rgba(0, 0, 0, 0.5);*/ /*Black background with opacity */
+        display: none;
+        position: fixed;
+        bottom: 80px;
+        width: 100%;
+        height: 100%;
       }
 
       /* The modal content box */
       .modal-content {
-          font-family: 'Oswald';
-          background-color: #999999ff;
-          margin: 15% auto;
-          padding: 0;
-          border: 1px solid #888;
-          width: 90%;
-          max-width: 500px;
+        font-family: 'Oswald';
+        background-color: #999999ff;
+        margin: 15% auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 90%;
+        max-width: 500px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
 
-          overflow: hidden; /* ensures buttons stay flush */
-          display: flex;
-          flex-direction: column;
+      .logoutButton {
+          font-family: 'Oswald';
+          font-size: 52px;
+          background-color: #999999ff;
+          text-align: center;
+
+          width: 300px;
+         height: 200px;
+          
+          position: absolute;
+          bottom: 150px;
+          right: 50px;
+          border: 2px solid #595959;
+          padding: 10px;
+      }
+
+      table {
+        margin-top: 50px;
+      }
+
+      th, td {
+        padding: 10px;
+        text-align: left;
+        border: none;
+      }
+
+      th {
+        background-color: #f4f4f4;
+      }
+
+      thead th:last-child {
+        background-color: #eee6deff;
+      }
+
+      tbody td:last-child {
+        background-color: #ffefc2ff;
+      }
+
+      .shift-info {
+        background-color: #4e2c2f;
+        color: #ffefc2ff;
+        margin-top: 50px;
+        text-align: center;
+        width: 300px;
+        height: 200px;
+      }
+
+      .shift-info p {
+        font-family: 'Oswald', sans-serif;
+        font-size: 30px;
+        margin: 10px 0;
+      }
+
+      .shift-info strong {
+        font-size: 30px;
+        font-weight: bold;
+        display: block;
       }
 
     </style>
@@ -43,11 +98,13 @@
   </head>
 
   <body>
+
     <!-- 103-138 Tab selection at the top -->
     <div class="top-row">
+      
       <div class="tab">
         <a href="M1.TableView.html">
-            <h2>Table View</h2>
+          <h2>Table View</h2>
         </a>
       </div>
       <div class="tab">
@@ -78,23 +135,100 @@
       <div class="selectedTab">
         <h2>Clock-In History</h2>
       </div>
+    </div>
+
+    <!-- Clock-In History Table -->
+    <div class="container">
+
+      <table>
+        
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Hours</th>
+            <th>Tips</th>
+            <th>Guests Tended</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+          
+        <tbody>
+          <!-- Sample Data Rows -->
+          <tr>
+            <td>03/10/2025</td>
+            <td>06:30</td>
+            <td>$62.15</td>
+            <td>18</td>
+            <td>$161.99</td>
+          </tr>
+          <tr>
+            <td>03/08/2025</td>
+            <td>5:00</td>
+            <td>$51.22</td>
+            <td>14</td>
+            <td>$128.02</td>
+          </tr>
+          <tr>
+            <td>03/01/2025</td>
+            <td>4:45</td>
+            <td>$31.01</td>
+            <td>7</td>
+            <td>$103.97</td>
+          </tr>
+          <tr>
+            <td>02/27/2025</td>
+            <td>5:15</td>
+            <td>$35.87</td>
+            <td>10</td>
+            <td>$116.51</td>
+          </tr>
+          <tr>
+            <td>02/26/2025</td>
+            <td>4:30</td>
+            <td>$40.50</td>
+            <td>8</td>
+            <td>$109.62</td>
+          </tr>
+          <tr>
+            <td>02/25/2025</td>
+            <td>4:15</td>
+            <td>$28.46</td>
+            <td>6</td>
+            <td>$93.74</td>
+          </tr>
+          <tr>
+            <td>02/24/2025</td>
+            <td>6:15</td>
+            <td>$50.63</td>
+            <td>16</td>
+            <td>$146.63</td>
+          </tr>
+          <!-- Add more rows as needed -->
+
+        </tbody>
+
+      </table>
 
     </div>
 
     <!-- "Sign Out/Clock Out" Button -->
-    <div class = "logoutButton" onclick="openModal()">
+    <div class="logoutButton" onclick="openModal()">
       Sign Out/ Clock Out
     </div>
 
-    <button onclick="openModal()">Open Popup</button>
-      
+    <!-- Annual Salary and Shift Timer -->
+    <div class="shift-info">
+      <p><strong>Annual Salary: </strong>$73,903</p>
+      <p><strong>Shift Timer (hh:mm): </strong>01:02</p>
+    </div>
+
     <!-- Sign Out pop-up verification -->
     <div id="myModal" class="modal">
       <div class="modal-content">
         <div class="modal-body">
           <h4>Would you like to clock out for the day?</h4>
         </div>
-      
+
         <div class="modal-buttons">
           <button class="back-button" onclick="closeModal()">Back</button>
           <button class="confirm-button" onclick="confirmClockOut()">✓</button>
@@ -103,7 +237,6 @@
     </div>
 
     <script>
-
       function openModal() {
         document.getElementById("myModal").style.display = "block";
       }
