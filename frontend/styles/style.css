@@ -67,6 +67,22 @@ h4 {
     background-color: #e4cc89ff;
     border: 1px solid #595959;
 }
+.wide-tab {
+    flex: 2; /* Makes it wider than the others */
+    position: relative; /* Needed for the pseudo-element */
+    z-index: 1; /* Keeps it above background extensions */
+}
+
+.wide-tab::after {
+    content: "";
+    position: fixed;
+    top: var(--box-height); /* Start just below the top row */
+    right: 0;
+    width: calc(100vw * 2 / 8); /* Match .wide-tab width (2 out of 8 flex units) */
+    height: calc(100vh - var(--box-height));
+    background-color: #e4cc89ff; /* Same as tab background */
+    z-index: -1; /* Pushes it behind the actual tab */
+}
 
 
 
