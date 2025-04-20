@@ -144,6 +144,35 @@ def update_table_status():
 
 # ----------------------- MANAGER ROUTES -----------------------
 
+#---------------- MANGER: INVENTORY -----------------
+@app.route("/api/inventory", methods=["GET"])
+def get_inventory():
+    inventory = load_csv(INVENTORY_FILE, ["InventoryID", "ItemName", "Category", "CurrentStock", "TimesOrdered"])
+    return jsonify(inventory.to_dict(orient="records"))
+
+@app.route("/api/inventory/order", methods=["POST"])
+def order_inventory_item():
+    data = request.json
+    item_name = data.get("ItemName", "").strip().lower()
+
+    inventory = load_csv(INVENTORY_FILE, ["InventoryID", "ItemName", "Category", "CurrentStock", "TimesOrdered"])
+
+    # Normalize the column for comparison
+    inventory["ItemName_normalized"] = inventory["ItemName"].str.strip().str.lower()
+
+    match = inventory[inventory["ItemName_normalized"] == item_name]
+
+    if match.empty:
+        return jsonify({"success": False, "message": f"Item '{item_name}' not found in inventory."}), 404
+
+    index = match.index[0]
+    inventory.at[index, "CurrentStock"] += 1
+    inventory.at[index, "TimesOrdered"] += 1
+
+    inventory = inventory.drop(columns=["ItemName_normalized"])  # Clean up temp column
+    save_csv(inventory, INVENTORY_FILE)
+
+    return jsonify({"success": True, "message": f"{inventory.at[index, 'ItemName']} updated in inventory."})
 
 # ----------------------- MANAGER: EMPLOYEE MANAGEMENT -----------------------
 @app.route("/api/manager/employees", methods=["GET"])
