@@ -2,20 +2,81 @@
 <html lang="en">
 
   <head>
+
     <meta charset="UTF-8">
     <title>Manager Dashboard - Orders</title>
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/M0.Style.css">
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 80px;
+      }
+
+      th, td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #f4f4f4;
+        border: none;
+
+      }
+
+      .view-button {
+        background-color: #6c4f3d;
+        color:#ffefc2ff;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .view-button:hover {
+        background-color: #4f3b2f;
+      }
+
+      .top-row {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .top-row h2 {
+        margin: 0;
+      }
+
+      .tab {
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      .selectedTab {
+        padding: 10px;
+        background-color: #d9c4a1;
+        color: #6c4f3d;
+        border-radius: 5px;
+      }
+
+      .tab a {
+        text-decoration: none;
+        color: inherit;
+      }
+      
+    </style>
+
   </head>
 
   <body>
 
     <div class="top-row">
-
       <div class="tab">
         <a href="M1.TableView.html">
-            <h2>Table View</h2>
+          <h2>Table View</h2>
         </a>
       </div>
 
@@ -55,7 +116,58 @@
 
     </div>
 
-    
+    <!-- Orders Table Section -->
+    <div class="container">
+      <table>
+        <thead>
+          <tr>
+            <th><u>OrderID</u></th>
+            <th><u>TableID</u></th>
+            <th><u>WaiterID</u></th>
+            <th><u>Status</u></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Sample Data Rows -->
+          <tr>
+            <td>004</td>
+            <td>010</td>
+            <td>001</td>
+            <td><i>PENDING</i></td>
+            <td><button class="view-button">View</button></td>
+          </tr>
+          <tr>
+            <td>003</td>
+            <td>012</td>
+            <td>002</td>
+            <td><i>PENDING</i></td>
+            <td><button class="view-button">View</button></td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>000</td>
+            <td>000</td>
+            <td>~10 min</td>
+            <td><button class="view-button">View</button></td>
+          </tr>
+          <tr>
+            <td>001</td>
+            <td>001</td>
+            <td>001</td>
+            <td>READY</td>
+            <td><button class="view-button">View</button></td>
+          </tr>
+          <tr>
+            <td>000</td>
+            <td>000</td>
+            <td>000</td>
+            <td>READY</td>
+            <td><button class="view-button">View</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
   </body>
 
