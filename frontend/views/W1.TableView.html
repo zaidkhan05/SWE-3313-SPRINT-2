@@ -73,18 +73,24 @@
     <div class="table-grid" id="table-grid"></div>
 
     <div id="popup" class="popup hidden">
+
       <div class="popup-content">
+
         <h3 id="popup-title">Edit Table</h3>
+
         <select id="popup-status">
           <option value="Available">Available</option>
           <option value="Occupied">Occupied</option>
           <option value="Reserved">Reserved</option>
         </select>
+
         <div style="margin-top: 1rem;">
           <button onclick="confirmPopup()">✔ Confirm</button>
           <button onclick="closePopup()">✖ Cancel</button>
         </div>
+
       </div>
+
     </div>
 
     <script>
@@ -134,7 +140,7 @@
           closePopup();
           fetchTables();
 
-          if (newStatus === "Occupied") {
+          if (newStatus === "Reserved") {
             // Redirect to the menu page
             window.location.href = "W4.Menu.Appetizers.html";
           }

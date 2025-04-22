@@ -83,17 +83,23 @@ h4 {
     z-index: -1;
 }
 .backButton {       /* Bottom left "Back" button */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0; /* Remove extra padding */
+    line-height: 1; /* Add this line for better vertical centering */
+    
     font-family: 'Oswald';
     font-size: 90px;
-    font-weight: bold;
+    font-weight: 200px;
     color: #517366ff;
     background-color: #ffefc2ff;
     text-align: center;
 
     width: 200px;
-    height: 150px;
+    height: 140px;
     
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     left: 0px;
     border: 2px solid #595959;

@@ -1,0 +1,108 @@
+body {
+    background: white;
+}
+
+.selectedTab {
+    background-color: white;
+}
+
+h5 {
+    font-family: 'Oswald';
+    text-align: left;
+    font-size: 25px;
+    font-weight: bold;
+    line-height: .5;
+}
+
+p {
+    font-family: 'Oswald';
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
+
+
+/* For Menu options (all but sides and beverages) */
+.input-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* spacing between rows */
+    margin: 120px 5%; /* pushes down below tabs */
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+  
+.input-rectangle {
+    background-color: white;
+    border: 2px solid #888;
+    padding: 12px 16px;
+    width: 800px;
+    height: 100px; /* match button height */
+    font-family: 'Oswald';
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    white-space: normal;
+    word-wrap: break-word;
+    flex: none;
+}
+  
+.input-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100px;
+    width: 100px;
+    padding: 0 20px;
+
+    font-family: 'Oswald';
+    font-size: 30px;
+    color: #ffefc2;
+    border: 2px solid #595959;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-modify {
+    background-color: #c68158ff;
+}
+  
+.btn-modify:hover {
+    background-color: rgb(172, 103, 64);
+}
+
+.btn-add {
+    font-weight: bold;
+    background-color: #517366ff;
+}
+  
+.btn-add:hover {
+    background-color: rgb(55, 80, 70);
+}
+
+/* For sides and beverages */
+.input-row-left {
+    display: flex;                /* Align items side by side */
+    justify-content: flex-start;  /* Align to the left */
+    gap: 7px;                    /* Space between the items */
+    margin: 120px 5%; /* pushes down below tabs */
+    flex-wrap: wrap;              /* Support wrapping if the screen is small */
+}
+
+/* For each [rectangle] [button] pair */
+.input-group.half {
+    display: flex;                /* Flex container for side-by-side items */
+    align-items: center;          /* Vertically center the items */
+    gap: 10px;                    /* Space between rectangle and button */
+}
+
+/* Make the rectangles half the width of the original */
+.input-group.half .input-rectangle {
+    width: 400px;                 /* Half-width */
+}
