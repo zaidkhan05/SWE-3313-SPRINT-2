@@ -67,21 +67,7 @@ h4 {
     background-color: #e4cc89ff;
     border: 1px solid #595959;
 }
-.wide-tab {     /* Used for the menu screen's "Table Order" tab */
-    flex: 2;
-    position: relative;
-    z-index: 1;
-}
-.wide-tab::after {      /* Might remove if unable to write inside */
-    content: "";
-    position: fixed;
-    top: var(--box-height);
-    right: 2;
-    width: calc(100vw * 2 / 8);
-    height: calc(100vh - var(--box-height));
-    background-color: #e4cc89ff;
-    z-index: -1;
-}
+
 .backButton {       /* Bottom left "Back" button */
     display: flex;
     justify-content: center;

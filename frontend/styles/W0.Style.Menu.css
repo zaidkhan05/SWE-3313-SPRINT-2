@@ -25,6 +25,7 @@ p {
 
 /* For Menu options (all but sides and beverages) */
 .input-stack {
+    align-items: center;
     display: flex;
     flex-direction: column;
     gap: 10px; /* spacing between rows */
@@ -89,7 +90,7 @@ p {
 /* For sides and beverages */
 .input-row-left {
     display: flex;                /* Align items side by side */
-    justify-content: flex-start;  /* Align to the left */
+    justify-content: center;  /* Align to the left */
     gap: 7px;                    /* Space between the items */
     margin: 120px 5%; /* pushes down below tabs */
     flex-wrap: wrap;              /* Support wrapping if the screen is small */
