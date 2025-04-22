@@ -155,6 +155,15 @@ h3.title {
     text-align: center;
 }
 
+div.table-grid {
+    grid-template-columns: repeat(6, 150px) !important;
+}
+
+div.table-cell {
+    padding: 21px !important;
+    font-size: 20px !important;
+}
+
 
 
 /* Used for verification pop-ups */
