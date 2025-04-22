@@ -108,7 +108,6 @@ def update_table_status():
 # ----------------------- WAITER ROUTES -----------------------
 
 
-
 # @app.route("/api/waiter/orders", methods=["GET"])
 # def waiter_orders():
 #     orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
@@ -145,8 +144,6 @@ def update_table_status():
 # def get_orders():
 #     orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
 #     return orders.to_dict(orient="records")
-
-
 
 
 # ----------------------- MANAGER ROUTES -----------------------

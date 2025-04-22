@@ -10,6 +10,30 @@
     <link rel="stylesheet" href="../styles/W0.Style.Menu.css">
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
     
+    <style>
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background: #fffef6;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        width: 400px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.25);
+      }
+      
+    </style>
     
   </head>
 
@@ -42,7 +66,6 @@
         </div>
       </div>
     </div>
-
 
     <div class="input-stack">
       
@@ -81,7 +104,7 @@
     <div id="addModal" class="modal">
       <div class="modal-content">
         <div class="modal-body">
-          <h4>Confirm adding this item to the order?</h4>
+          <h4>Confirm adding this item to the table order?</h4>
         </div>
         <div class="modal-buttons">
           <button class="back-button" onclick="closeAddModal()">Back</button>
@@ -91,49 +114,31 @@
     </div>
 
     <script>
-window.onload = function () {
-    let selectedItem = null;
+      let selectedItemText = "";
 
-    const orderList = [];
-
-    // Attach event listeners AFTER DOM is fully loaded
-    document.querySelectorAll('.btn-add').forEach((button) => {
-      button.addEventListener('click', () => {
-        selectedItem = button.parentElement.querySelector('.input-rectangle').innerText;
-        openAddModal();
-      });
-    });
-
-    function openAddModal() {
-      document.getElementById("addModal").style.display = "block";
-    }
-
-    function closeAddModal() {
-      document.getElementById("addModal").style.display = "none";
-    }
-
-    function confirmAdd() {
-      if (selectedItem) {
-        const wideTab = document.querySelector('.wide-tab');
-
-        const itemEl = document.createElement('p');
-        itemEl.textContent = selectedItem;
-        itemEl.style.fontFamily = 'Oswald';
-        itemEl.style.fontSize = '20px';
-        itemEl.style.margin = '10px';
-
-        wideTab.appendChild(itemEl);
-
-        orderList.push(selectedItem);
+      function openAddModal(itemText) {
+        selectedItemText = itemText;
+        document.getElementById("addModal").style.display = "flex";
       }
 
-      closeAddModal();
-    }
+      function closeAddModal() {
+        document.getElementById("addModal").style.display = "none";
+      }
 
-    // Make confirmAdd and closeAddModal globally accessible
-    window.confirmAdd = confirmAdd;
-    window.closeAddModal = closeAddModal;
-  }
+      function confirmAdd() {
+        // Optional: store selectedItemText in localStorage/sessionStorage for later use
+        window.location.href = "W11.Menu.TableOrder.html";
+      }
+
+      window.onload = function () {
+        document.querySelectorAll('.btn-add').forEach(button => {
+          button.addEventListener('click', () => {
+            const rectangle = button.parentElement.querySelector('.input-rectangle');
+            const itemText = rectangle ? rectangle.innerText.trim() : "Unknown Item";
+            openAddModal(itemText);
+          });
+        });
+      };
       function openModal() {
         document.getElementById("myModal").style.display = "block";
       }
