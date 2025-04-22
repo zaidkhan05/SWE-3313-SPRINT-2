@@ -13,7 +13,7 @@ import sys
 if getattr(sys, 'frozen', False):
     base_path = sys._MEIPASS  # PyInstaller's temp unpack path
 else:
-    base_path = os.path.abspath(".")
+    base_path = os.path.abspath("backend/")
 
 DATA_DIR = os.path.join(base_path, "data")
 USERS_FILE = os.path.join(DATA_DIR, "users.csv")
@@ -253,7 +253,7 @@ import webbrowser
 from threading import Timer
 
 def open_browser():
-    file_path = os.path.abspath("../frontend/views/L1.UsernamePassword.html")
+    file_path = os.path.abspath("frontend/views/L1.UsernamePassword.html")
     webbrowser.open(f"file:///{file_path}")
 
 if __name__ == "__main__":
