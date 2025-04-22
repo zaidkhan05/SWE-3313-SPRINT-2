@@ -14,6 +14,7 @@
 
   <body>
 
+    <!-- TOP ROW OF FOOD CATEGORIES -->
     <div class="top-row">
         <div class="tab"><a href="W4.Menu.Appetizers.html"><h2>Appetizers</h2></a></div>
         <div class="tab"><a href="W5.Menu.Salads.html"><h2>Salads</h2></a></div>
@@ -25,10 +26,12 @@
         <div class="tab"><a href="W11.Menu.TableOrder.html"><h2>TableOrder</h2></a></div>
     </div>
     
+    <!-- BACK BUTTON PLACEMENT -->
     <div class = "backButton" onclick="openModal()">
         ←
     </div>
   
+    <!-- BACK BUTTON VERIFICATION POP-UP -->
     <div id="myModal" class="modal">
         <div class="modal-content">
           <div class="modal-body">
@@ -42,6 +45,7 @@
         </div>
     </div>
       
+    <!-- LIST OF APPETIZERS -->
     <div class="input-stack">
       
       <div class="input-group">
@@ -70,19 +74,57 @@
 
     </div>
 
+    <!-- ADDING ITEM VERIFICATION POP-UP -->
+    <div id="addModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h4>Confirm adding this item to the table order?</h4>
+        </div>
+        <div class="modal-buttons">
+          <button class="back-button" onclick="closeAddModal()">Back</button>
+          <button class="confirm-button" onclick="confirmAdd()">✓</button>
+        </div>
+      </div>
+    </div>
+
     <script>
+      let selectedItemText = "";
+
+      function openAddModal(itemText) {
+        selectedItemText = itemText;
+        document.getElementById("addModal").style.display = "flex";
+      }
+
+      function closeAddModal() {
+        document.getElementById("addModal").style.display = "none";
+      }
+
+      function confirmAdd() {
+        // Optional: store selectedItemText in localStorage/sessionStorage for later use
+        window.location.href = "W11.Menu.TableOrder.html";
+      }
+
+      window.onload = function () {
+        document.querySelectorAll('.btn-add').forEach(button => {
+          button.addEventListener('click', () => {
+            const rectangle = button.parentElement.querySelector('.input-rectangle');
+            const itemText = rectangle ? rectangle.innerText.trim() : "Unknown Item";
+            openAddModal(itemText);
+          });
+        });
+      };
   
-        function openModal() {
-          document.getElementById("myModal").style.display = "block";
-        }
+      function openModal() {
+        document.getElementById("myModal").style.display = "block";
+      }
   
-        function closeModal() {
-          document.getElementById("myModal").style.display = "none";
-        }
+      function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+      }
   
-        function confirmClockOut() {
-          window.location.href = "W1.TableView.html";
-        }
+      function confirmClockOut() {
+        window.location.href = "W1.TableView.html";
+      }
         
     </script>
 

@@ -107,3 +107,27 @@ p {
 .input-group.half .input-rectangle {
     width: 400px;                 /* Half-width */
 }
+
+
+
+/* Verification for ADDING items */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    background: #fffef6;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 400px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.25);
+  }
