@@ -309,7 +309,6 @@
           const yearBtn = monthBtn.closest(".panel").previousElementSibling; // Year accordion
           const year = yearBtn.textContent.replace("-", "").trim();
 
-
           selectedDate = `${year} - ${month} ${day}`;
           modalText.innerHTML = `<h4>View analytics for ${selectedDate}?</h4>`;
           modal.style.display = "flex";
