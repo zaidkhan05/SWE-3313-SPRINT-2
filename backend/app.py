@@ -35,6 +35,7 @@ def load_csv(file, columns):
 def save_csv(df, file):
     df.to_csv(file, index=False)
 
+#--------------------------- Login ---------------------------
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.json
@@ -61,7 +62,8 @@ def login():
             attempts = pd.concat([attempts, pd.DataFrame([[username, 1]], columns=["username", "attempts"])], ignore_index=True)
         save_csv(attempts, ATTEMPTS_FILE)
         return jsonify({"success": False, "message": "Invalid credentials"}), 401
-
+    
+#--------------------------- RESET LOGIN ATTEMPTS --------------------------- 
 @app.route("/api/reset-attempts", methods=["POST"])
 def reset_attempts():
     data = request.json
@@ -80,11 +82,13 @@ def reset_attempts():
     save_csv(attempts, ATTEMPTS_FILE)
     return jsonify({"success": True, "message": f"Login attempts reset for {target_user}"})
 
+#--------------------------- GET TABLES --------------------------- 
 @app.route("/api/tables", methods=["GET"])
 def get_tables():
     tables = load_csv(TABLES_FILE, ["TableID", "Status", "WaiterID", "BusboyID"])
     return tables.to_dict(orient="records")
 
+#--------------------------- UPDATE TABLES --------------------------- 
 @app.route("/api/tables/update", methods=["POST"])
 def update_table_status():
     data = request.json
@@ -95,17 +99,20 @@ def update_table_status():
         return jsonify({"success": True})
     return jsonify({"success": False, "message": "Table not found"}), 404
 
+#--------------------------- GET FULL MENU --------------------------- 
 @app.route("/api/menu", methods=["GET"])
 def get_full_menu():
     menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock"])
     return menu.to_dict(orient="records")
 
+#--------------------------- GET MENU BY CATEGORY
 @app.route("/api/menu/<category>", methods=["GET"])
 def get_menu_by_category(category):
     menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock"])
     items = menu[menu["Category"].str.lower() == category.lower()]
     return items.to_dict(orient="records")
 
+#--------------------------- ADD ORDER ITEMS --------------------------- 
 @app.route("/api/order-items", methods=["POST"])
 def add_order_item():
     data = request.json
@@ -114,6 +121,7 @@ def add_order_item():
     save_csv(order_items, ORDER_ITEMS_FILE)
     return jsonify({"success": True})
 
+#--------------------------- FINALIZE ORDER --------------------------- 
 @app.route("/api/orders/finalize", methods=["POST"])
 def finalize_order():
     data = request.json
@@ -133,6 +141,7 @@ def finalize_order():
 
     return jsonify({"success": True, "message": f"Order {order_id} finalized."})
 
+#--------------------------- CLEAR TABLE ORDER --------------------------- 
 @app.route("/api/order-items/clear", methods=["POST"])
 def clear_order_items():
     data = request.json
@@ -142,6 +151,7 @@ def clear_order_items():
     save_csv(order_items, ORDER_ITEMS_FILE)
     return jsonify({"success": True, "message": f"Order {order_id} cleared."})
 
+#--------------------------- GET ORDER ITEMS --------------------------- 
 @app.route("/api/order-items", methods=["GET"])
 def get_order_items():
     order_id = request.args.get("order_id")
@@ -150,6 +160,7 @@ def get_order_items():
     filtered = filtered.fillna("")
     return filtered.to_dict(orient="records")
 
+#--------------------------- GET NEXT ORDER ID --------------------------- 
 @app.route("/api/orders/new-id", methods=["GET"])
 def get_next_order_id():
     orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
@@ -170,15 +181,14 @@ def get_next_order_id():
     return jsonify({"OrderID": next_id})
 
 
-
-
-
-
+#--------------------------- MANAGER---------------------------
+#--------------------------- INVENTORY --------------------------- 
 @app.route("/api/inventory", methods=["GET"])
 def get_inventory():
     inventory = load_csv(INVENTORY_FILE, ["InventoryID", "ItemName", "Category", "CurrentStock", "TimesOrdered"])
     return jsonify(inventory.to_dict(orient="records"))
 
+#--------------------------- ORDERING SUPPLIES --------------------------- 
 @app.route("/api/inventory/order", methods=["POST"])
 def order_inventory_item():
     data = request.json
@@ -199,12 +209,14 @@ def order_inventory_item():
 
     return jsonify({"success": True, "message": f"{inventory.at[index, 'ItemName']} updated in inventory."})
 
+#--------------------------- GET-EMPLOYEES --------------------------- 
 @app.route("/api/manager/employees", methods=["GET"])
 def manager_get_employees():
     users = load_csv(USERS_FILE, ["UserName", "Password", "EmployeeID", "Role", "Clock_In_Time", "Clock_Out_Time"])
     users = users.astype(object).where(pd.notnull(users), None)
     return jsonify(users.to_dict(orient="records"))
 
+#--------------------------- ADD-EMPLOYEE --------------------------- 
 @app.route("/api/manager/employees", methods=["POST"])
 def manager_add_employee():
     data = request.json
@@ -224,6 +236,7 @@ def manager_add_employee():
     save_csv(users, USERS_FILE)
     return jsonify({"success": True})
 
+#--------------------------- UPDATE-EMPLOYEE --------------------------- 
 @app.route("/api/manager/employees/update", methods=["POST"])
 def manager_update_employee():
     data = request.json
@@ -239,6 +252,7 @@ def manager_update_employee():
     save_csv(users, USERS_FILE)
     return jsonify({"success": True, "message": "User updated successfully."})
 
+#--------------------------- DELETE-EMPLOYEE --------------------------- 
 @app.route("/api/manager/employees/delete", methods=["POST"])
 def manager_delete_employee():
     data = request.json
@@ -249,6 +263,7 @@ def manager_delete_employee():
     save_csv(users, USERS_FILE)
     return jsonify({"success": True, "message": "User removed successfully."})
 
+#--------------------------- OPENING TO BROWSER --------------------------- 
 def open_browser():
     file_path = os.path.abspath("frontend/views/L1.UsernamePassword.html")
     webbrowser.open(f"file:///{file_path}")
