@@ -42,7 +42,7 @@ def login():
     username = data.get("username")
     password = data.get("password")
 
-    users = load_csv(USERS_FILE, ["UserName", "Password", "Role"])
+    users = load_csv(USERS_FILE, ["UserName", "Password", "EmployeeID", "Role", "Clock_In_Time", "Clock_Out_Time"])
     attempts = load_csv(ATTEMPTS_FILE, ["username", "attempts"])
 
     if username in attempts["username"].values:
@@ -52,9 +52,22 @@ def login():
 
     match = users[(users["UserName"] == username) & (users["Password"] == password)]
     if not match.empty:
+        # Reset attempts
         attempts = attempts[attempts["username"] != username]
         save_csv(attempts, ATTEMPTS_FILE)
-        return jsonify({"success": True, "username": username, "role": match.iloc[0]["Role"]})
+
+        # Record clock-in time
+        idx = match.index[0]
+        now = datetime.now().isoformat()
+        users.at[idx, "Clock_In_Time"] = now
+        save_csv(users, USERS_FILE)
+
+        return jsonify({
+            "success": True,
+            "username": username,
+            "role": match.iloc[0]["Role"],
+            "clockInTime": now
+        })
     else:
         if username in attempts["username"].values:
             attempts.loc[attempts["username"] == username, "attempts"] += 1

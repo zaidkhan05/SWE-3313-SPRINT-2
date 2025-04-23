@@ -1,7 +1,7 @@
 UserName,Password,EmployeeID,Role,Clock_In_Time,Clock_Out_Time
-manager1,managerpass,MGR001,Manager,,
+manager1,managerpass,MGR001,Manager,2025-04-23T16:57:56.871020,
 manager2,managerpass,MGR002,Manager,,
-fred,waiterpass,EMP101,Waiter,,
+fred,waiterpass,EMP101,Waiter,2025-04-23T16:57:50.931098,
 josh,waiterpass,EMP102,Waiter,,
 waiter3,waiterpass,EMP103,Waiter,,
 waiter4,waiterpass,EMP104,Waiter,,
