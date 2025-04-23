@@ -114,6 +114,7 @@ def get_full_menu():
     return menu.to_dict(orient="records")
 
 
+<<<<<<< HEAD
 @app.route("/api/menu/<category>", methods=["GET"])
 def get_menu_by_category(category):
     menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock"])
@@ -127,6 +128,13 @@ def add_order_item():
     order_items = pd.concat([order_items, pd.DataFrame([data])], ignore_index=True)
     save_csv(order_items, ORDER_ITEMS_FILE)
     return jsonify({"success": True})
+=======
+# @app.route("/api/waiter/orders", methods=["GET"])
+# def waiter_orders():
+#     orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
+#     pending = orders[orders["Status"].str.lower() != "ready"]
+#     return pending.to_dict(orient="records")
+>>>>>>> eb1819c84c69bef58285384439a706bcac58477b
 
 @app.route("/api/orders/finalize", methods=["POST"])
 def finalize_order():
@@ -165,8 +173,6 @@ def get_order_items():
     filtered = order_items[order_items["OrderID"] == order_id]
     filtered = filtered.fillna("")  # <--- ✅ Fix NaN values
     return filtered.to_dict(orient="records")
-
-
 
 
 

@@ -7,9 +7,12 @@
     <link rel="stylesheet" href="../styles/W0.Style.css">
     <link rel="stylesheet" href="../styles/W0.Style.Menu.css">
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+
   </head>
 
   <body>
+
+    <!-- TOP ROW OF FOOD CATEGORIES -->
     <div class="top-row">
       <div class="selectedTab"><h2>Appetizers</h2></div>
       <div class="tab"><a href="W5.Menu.Salads.html"><h2>Salads</h2></a></div>
@@ -20,9 +23,113 @@
       <div class="tab"><a href="W10.Menu.Beverages.html"><h2>Beverages</h2></a></div>
       <div class="tab"><a href="W11.Menu.TableOrder.html"><h2>TableOrder</h2></a></div>
     </div>
+       
+    <!-- BACK BUTTON PLACEMENT -->
+    <div class = "backButton" onclick="openModal()">
+      ←
+    </div>
 
     <div class="input-stack" id="menu-container"></div>
 
+    <!-- BACK BUTTON VERIFICATION POP-UP -->
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h4>Would you like to exit the menu?</h4>
+        </div>
+      
+        <div class="modal-buttons">
+          <button class="back-button" onclick="closeModal()">Back</button>
+          <button class="confirm-button" onclick="confirmClockOut()">✓</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIST OF APPETIZERS -->
+    <div class="input-stack">
+      
+      <div class="input-group">
+        <div class="input-rectangle"><h5>Chicken Nachos - $8.50<p>Pulled chicken, spicy white cheese sauce, & cheddar cheese topped with red onions & cilantro. Add BBQ sauce (+0.50)</p></h5></div>
+        <button class="input-btn btn-modify">Modify</button>
+        <button class="input-btn btn-add">✓</button>
+      </div>
+    
+      <div class="input-group">
+        <div class="input-rectangle"><h5>Pork Nachos - $8.50<p>Pulled pork, spicy white cheese sauce, & pepper jack cheese topped with tomato, Scallions & cilantro, Add BBQ sauce (+0.50)</p></h5></div>
+        <button class="input-btn btn-modify">Modify</button>
+        <button class="input-btn btn-add">✓</button>
+      </div>
+
+      <div class="input-group">
+        <div class="input-rectangle"><h5>Pork or Chicken Sliders - 3 for $5.00<p>Sauces: Chipotle, Jim Beam or Carolina Gold BBQ</p></h5></div>
+        <button class="input-btn btn-modify">Modify</button>
+        <button class="input-btn btn-add">✓</button>
+      </div>
+    
+      <div class="input-group">
+        <div class="input-rectangle"><h5>Catfish Bites - $6.50<p>Catfish pieces cornmeal-battered & fried. Served with lemon & spicy cocktail sauce</p></h5></div>
+        <button class="input-btn btn-modify">Modify</button>
+        <button class="input-btn btn-add">✓</button>
+      </div>
+
+      <div class="input-group">
+        <div class="input-rectangle"><h5>Fried Veggies - $6.50<p>Choice of okra, zucchini, squash, or Mix & Match. Served with a side of spicy ranch</p></h5></div>
+        <button class="input-btn btn-modify">Modify</button>
+        <button class="input-btn btn-add">✓</button>
+      </div>
+
+    </div>
+
+    <!-- ADDING ITEM VERIFICATION POP-UP -->
+    <div id="addModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h4>Confirm adding this item to the table order?</h4>
+        </div>
+        <div class="modal-buttons">
+          <button class="back-button" onclick="closeAddModal()">Back</button>
+          <button class="confirm-button" onclick="confirmAdd()">✓</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let selectedItemText = "";
+
+      function openAddModal(itemText) {
+        selectedItemText = itemText;
+        document.getElementById("addModal").style.display = "flex";
+      }
+
+      function closeAddModal() {
+        document.getElementById("addModal").style.display = "none";
+      }
+
+      function confirmAdd() {
+        // Optional: store selectedItemText in localStorage/sessionStorage for later use
+        window.location.href = "W11.Menu.TableOrder.html";
+      }
+
+      window.onload = function () {
+        document.querySelectorAll('.btn-add').forEach(button => {
+          button.addEventListener('click', () => {
+            const rectangle = button.parentElement.querySelector('.input-rectangle');
+            const itemText = rectangle ? rectangle.innerText.trim() : "Unknown Item";
+            openAddModal(itemText);
+          });
+        });
+      };
+
+      function openModal() {
+        document.getElementById("myModal").style.display = "block";
+      }
+      function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+      }
+      function confirmClockOut() {
+        window.location.href = "W1.TableView.html";
+      }
+      
     <script>
       const currentOrderId = localStorage.getItem("activeOrderId") || "ORD001";
 
