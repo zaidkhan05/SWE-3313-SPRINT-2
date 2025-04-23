@@ -23,6 +23,7 @@ CLOCKIN_FILE = os.path.join(DATA_DIR, "clockin.csv")
 MENU_FILE = os.path.join(DATA_DIR, "menu_items.csv")
 ATTEMPTS_FILE = os.path.join(DATA_DIR, "login_attempts.csv")
 TABLES_FILE = os.path.join(DATA_DIR, "tables.csv")
+ORDER_ITEMS_FILE = os.path.join(DATA_DIR, "order_items.csv")
 
 os.makedirs(DATA_DIR, exist_ok=True)
 
@@ -105,46 +106,67 @@ def update_table_status():
 
 
 
-# ----------------------- WAITER ROUTES -----------------------
+# ----------------------- MENU ROUTES -----------------------
+
+@app.route("/api/menu", methods=["GET"])
+def get_full_menu():
+    menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock"])
+    return menu.to_dict(orient="records")
 
 
+@app.route("/api/menu/<category>", methods=["GET"])
+def get_menu_by_category(category):
+    menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock"])
+    items = menu[menu["Category"].str.lower() == category.lower()]
+    return items.to_dict(orient="records")
 
-# @app.route("/api/waiter/orders", methods=["GET"])
-# def waiter_orders():
-#     orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
-#     pending = orders[orders["Status"].str.lower() != "ready"]
-#     return pending.to_dict(orient="records")
+@app.route("/api/order-items", methods=["POST"])
+def add_order_item():
+    data = request.json
+    order_items = load_csv(ORDER_ITEMS_FILE, ["OrderID", "ItemID", "Quantity", "Customization"])
+    order_items = pd.concat([order_items, pd.DataFrame([data])], ignore_index=True)
+    save_csv(order_items, ORDER_ITEMS_FILE)
+    return jsonify({"success": True})
 
-# @app.route("/api/waiter/clockin", methods=["GET"])
-# def waiter_clockin_history():
-#     clock_data = load_csv(CLOCKIN_FILE, ["UserName", "Role", "Date", "Hours"])
-#     waiters = clock_data[clock_data["Role"].str.lower() == "waiter"]
-#     return waiters.to_dict(orient="records")
+@app.route("/api/orders/finalize", methods=["POST"])
+def finalize_order():
+    data = request.json
+    order_id = data.get("OrderID")
 
-# @app.route("/api/menu", methods=["GET"])
-# def get_menu():
-#     menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock"])
-#     return menu.to_dict(orient="records")
+    orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
+    if order_id not in orders["OrderID"].values:
+        # Add new order if not already there
+        new_row = {
+            "OrderID": order_id,
+            "Status": "Pending",
+            "TimeStamp": datetime.now().isoformat(),
+            "WaiterID": "EMP101",  # Replace with actual waiter ID if tracked
+            "TableID": "A1"        # Replace with actual table ID if tracked
+        }
+        orders = pd.concat([orders, pd.DataFrame([new_row])], ignore_index=True)
+        save_csv(orders, ORDERS_FILE)
 
-# @app.route("/api/orders", methods=["POST"])
-# def submit_order():
-#     data = request.json
-#     order = {
-#         "OrderID": data.get("OrderID"),
-#         "Status": "Pending",
-#         "TimeStamp": datetime.now().isoformat(),
-#         "WaiterID": data.get("WaiterID"),
-#         "TableID": data.get("TableID")
-#     }
-#     orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
-#     orders = pd.concat([orders, pd.DataFrame([order])], ignore_index=True)
-#     save_csv(orders, ORDERS_FILE)
-#     return jsonify({"success": True})
+    return jsonify({"success": True, "message": f"Order {order_id} finalized."})
 
-# @app.route("/api/orders", methods=["GET"])
-# def get_orders():
-#     orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
-#     return orders.to_dict(orient="records")
+
+@app.route("/api/order-items/clear", methods=["POST"])
+def clear_order_items():
+    data = request.json
+    order_id = data.get("OrderID")
+    order_items = load_csv(ORDER_ITEMS_FILE, ["OrderID", "ItemID", "Quantity", "Customization"])
+    order_items = order_items[order_items["OrderID"] != order_id]
+    save_csv(order_items, ORDER_ITEMS_FILE)
+    return jsonify({"success": True, "message": f"Order {order_id} cleared."})
+
+@app.route("/api/order-items", methods=["GET"])
+def get_order_items():
+    order_id = request.args.get("order_id")
+    order_items = load_csv(ORDER_ITEMS_FILE, ["OrderID", "ItemID", "Quantity", "Customization"])
+    filtered = order_items[order_items["OrderID"] == order_id]
+    filtered = filtered.fillna("")  # <--- ✅ Fix NaN values
+    return filtered.to_dict(orient="records")
+
+
 
 
 
