@@ -176,7 +176,7 @@
     <!-- Current Hourly Pay and Shift Timer -->
     <div class="shift-info">
       <p><strong>Current Hourly Pay: </strong>$15.36</p>
-      <p><strong>Shift Timer (hh:mm): </strong>01:02</p>
+      <p><strong>Shift Timer (hh:mm): </strong><span id="timer"></span></p> <!--temporary change in time displayed-->
     </div>
 
     <!-- Sign Out pop-up verification -->
@@ -204,6 +204,18 @@
       function confirmClockOut() {
         window.location.href = "L1.UsernamePassword.html";
       }
+
+      const clockInTime = new Date(sessionStorage.getItem("clockInTime"));
+      function updateTimer() {
+        const now = new Date();
+        const diff = new Date(now - clockInTime);
+        const hours = diff.getUTCHours().toString().padStart(2, '0');
+        const minutes = diff.getUTCMinutes().toString().padStart(2, '0');
+        const seconds = diff.getUTCSeconds().toString().padStart(2, '0');
+        document.getElementById("timer").textContent = `${hours}:${minutes}:${seconds}`;
+      }
+      setInterval(updateTimer, 1000);
+      updateTimer();
               
     </script>
 
