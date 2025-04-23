@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
+
     <meta charset="UTF-8">
     <title>Waiter Dashboard - Menu - Appetizers</title>
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/W0.Style.css">
     <link rel="stylesheet" href="../styles/W0.Style.Menu.css">
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+  
   </head>
+
   <body>
+
+    <!-- TOP ROW OF FOOD CATEGORIES -->
     <div class="top-row">
       <div class="selectedTab"><h2>Appetizers</h2></div>
       <div class="tab"><a href="W5.Menu.Salads.html"><h2>Salads</h2></a></div>
@@ -20,12 +26,14 @@
       <div class="tab"><a href="W11.Menu.TableOrder.html"><h2>TableOrder</h2></a></div>
     </div>
 
+    <!-- BACK BUTTON PLACEMENT -->
     <div class="backButton" onclick="openModal()">
       ←
     </div>
 
     <div class="input-stack" id="menu-container"></div>
 
+    <!-- BACK BUTTON VERIFICATION POP-UP -->
     <div id="myModal" class="modal">
       <div class="modal-content">
         <div class="modal-body">
@@ -38,6 +46,7 @@
       </div>
     </div>
 
+    <!-- ADDING ITEM VERIFICATION POP-UP -->
     <div id="addModal" class="modal">
       <div class="modal-content">
         <div class="modal-body">
@@ -109,10 +118,11 @@
 
           group.innerHTML = `
             <div class="input-rectangle">
-              <h5>${item.Name} - $${item.Price.toFixed(2)}</h5>
-              <p>${item.Description || "No description available."}</p>
+              <h5>${item.Name} - $${item.Price.toFixed(2)}
+              <p>${item.Description || ""}</p></h5>
             </div>
-            <button class="input-btn btn-add" data-id="${item.ItemID}" data-name="${item.Name}">Add ✓</button>
+            <button class="input-btn btn-modify" data-id="${item.ItemID}" data-name="${item.Name}">Modify</button>
+            <button class="input-btn btn-add" data-id="${item.ItemID}" data-name="${item.Name}">✓</button>
           `;
 
           container.appendChild(group);
