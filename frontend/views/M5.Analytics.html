@@ -326,7 +326,20 @@
         modal.style.display = "none";
 
         // Handle confirmed date (you can replace this with actual logic)
-        alert(`Loading data for ${selectedDate}`);
+        const dateParts = selectedDate.match(/(\d{4}) - (\w+) (\d{1,2})/);
+        const [_, year, monthName, day] = dateParts;
+
+        const monthMap = {
+          January: "01", February: "02", March: "03", April: "04",
+          May: "05", June: "06", July: "07", August: "08",
+          September: "09", October: "10", November: "11", December: "12"
+        };
+
+        const formattedDate = `${year}-${monthMap[monthName]}-${String(day).padStart(2, '0')}`;
+
+        // Save to localStorage and redirect to Table View
+        localStorage.setItem("selectedAnalyticsDate", formattedDate);
+        window.location.href = "M8.SampleReport.html";
       };
     </script>
 
