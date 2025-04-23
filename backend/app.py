@@ -102,15 +102,19 @@ def update_table_status():
 #--------------------------- GET FULL MENU --------------------------- 
 @app.route("/api/menu", methods=["GET"])
 def get_full_menu():
-    menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock"])
+    menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock", "Description"])
+    menu = menu.fillna("")  # ✅ Prevent NaN from breaking JSON
     return menu.to_dict(orient="records")
+
 
 #--------------------------- GET MENU BY CATEGORY
 @app.route("/api/menu/<category>", methods=["GET"])
 def get_menu_by_category(category):
-    menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock"])
+    menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock", "Description"])
     items = menu[menu["Category"].str.lower() == category.lower()]
+    items = items.fillna("")  # ✅ Fix here too
     return items.to_dict(orient="records")
+
 
 #--------------------------- ADD ORDER ITEMS --------------------------- 
 @app.route("/api/order-items", methods=["POST"])

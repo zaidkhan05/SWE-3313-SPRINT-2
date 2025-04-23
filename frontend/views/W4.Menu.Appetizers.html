@@ -2,18 +2,15 @@
 <html lang="en">
 
   <head>
-
     <meta charset="UTF-8">
     <title>Waiter Dashboard - Menu - Appetizers</title>
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/W0.Style.css">
     <link rel="stylesheet" href="../styles/W0.Style.Menu.css">
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
-  
   </head>
 
   <body>
-
     <!-- TOP ROW OF FOOD CATEGORIES -->
     <div class="top-row">
       <div class="selectedTab"><h2>Appetizers</h2></div>
@@ -60,11 +57,13 @@
     </div>
 
     <script>
-      let selectedItemText = "";
+      let selectedItemId = null;
+      let selectedItemName = "";
       const currentOrderId = localStorage.getItem("activeOrderId") || "ORD001";
 
-      function openAddModal(itemText) {
-        selectedItemText = itemText;
+      function openAddModal(itemId, itemName) {
+        selectedItemId = itemId;
+        selectedItemName = itemName;
         document.getElementById("addModal").style.display = "flex";
       }
 
@@ -75,7 +74,7 @@
       async function confirmAdd() {
         const payload = {
           OrderID: currentOrderId,
-          ItemID: selectedItemText,
+          ItemID: selectedItemId,
           Quantity: 1,
           Customization: ""
         };
@@ -88,7 +87,7 @@
 
         const data = await res.json();
         if (data.success) {
-          alert(`${selectedItemText} added to order.`);
+          alert(`${selectedItemName} added to order.`);
           closeAddModal();
         } else {
           alert("Failed to add item to order.");
@@ -129,8 +128,9 @@
 
         document.querySelectorAll(".btn-add").forEach(button => {
           button.addEventListener("click", () => {
+            const itemId = button.dataset.id;
             const itemName = button.dataset.name;
-            openAddModal(itemName);
+            openAddModal(itemId, itemName);
           });
         });
       }
