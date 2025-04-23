@@ -9,89 +9,63 @@
     <link rel="stylesheet" href="../styles/M0.Style.css">
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
 
-  <style>
-    .report-container {
+    <style>
+      .report-container {
+        
+        background-color: #ffefc2;
+        border: 2px solid #412527;
+        padding: 30px;
+        max-width: 1000px;
+        margin: 100px auto;
+        font-family: 'Oswald', sans-serif;
+        font-size: 20px;
+        color: #412527;
+      }
       
-      background-color: #ffefc2;
-      border: 2px solid #412527;
-      padding: 30px;
-      max-width: 1000px;
-      margin: 100px auto;
-      font-family: 'Oswald', sans-serif;
-      font-size: 20px;
-      color: #412527;
-    }
-    
-    .report-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 22px;
-      margin-bottom: 30px;
-    }
-    
-    .report-header .highlight {
-      color: #517366;
-    }
-    
-    back-btn {
-      font-size: 24px;
-      background-color: #412527;
-      color: #ffefc2;
-      border: none;
-      cursor: pointer;
-      padding: 10px 15px;
-    }
-    
-    back-btn:hover {
-      background-color: #291716;
-    }
-    
-    .report-grid {
-      display: flex;
-      justify-content: space-between;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-    
-    .report-grid p {
-      margin: 12px 0;
-    }
-    
-    .highlight {
-      color: #517366;
-      font-weight: bold;
-    }
-  </style>
+      .report-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 22px;
+        margin-bottom: 30px;
+      }
+      
+      .report-header .highlight {
+        color: #517366;
+      }
+      
+      .back-btn {
+        font-size: 24px;
+        background-color: #412527;
+        color: #ffefc2;
+        border: none;
+        cursor: pointer;
+        padding: 10px 15px;
+      }
+      
+      .back-btn:hover {
+        background-color: #291716;
+      }
+      
+      .report-grid {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+      
+      .report-grid p {
+        margin: 12px 0;
+      }
+      
+      .highlight {
+        color: #517366;
+        font-weight: bold;
+      }
+    </style>
+
   </head>
 
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      const selectedDate = localStorage.getItem("selectedAnalyticsDate");
-  
-      if (selectedDate) {
-        const dateElement = document.getElementById("report-date");
-  
-        // Add T00:00:00 to avoid timezone shift
-        const dateObj = new Date(selectedDate + "T00:00:00");
-  
-        const options = { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit' };
-        const formattedDate = dateObj.toLocaleDateString('en-US', options);
-  
-        if (dateElement) {
-          dateElement.textContent = formattedDate;
-        }
-      }
-
-      const backButton = document.getElementById("backButton");
-    if (backButton) {
-      backButton.addEventListener("click", () => {
-        window.location.href = "M5.Analytics.html";
-      });
-    }
-    });
-  </script>
-  
   <body>
 
     <div class="top-row">
@@ -105,12 +79,14 @@
     </div>
 
     <div class="report-container">
+
       <div class="report-header">
         <span><strong>Date:</strong> <span id="report-date" class="highlight"></span></span>
         <button class="back-btn" id="backButton">←</button>
       </div>
   
       <div class="report-grid">
+
         <div>
           <p><strong>Today's Income:</strong> <span class="highlight">$1,350</span></p>
           <p><strong>Today's Profit:</strong> <span class="highlight">$60.34</span></p>
@@ -131,7 +107,36 @@
           <p><strong>Orders paid w/ card:</strong> 63</p>
           <p><strong>Average turnaround time:</strong> <span class="highlight">20 minutes</span></p>
         </div>
+
       </div>
+
     </div>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const selectedDate = localStorage.getItem("selectedAnalyticsDate");
     
+        if (selectedDate) {
+          const dateElement = document.getElementById("report-date");
+    
+          // Add T00:00:00 to avoid timezone shift
+          const dateObj = new Date(selectedDate + "T00:00:00");
+    
+          const options = { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit' };
+          const formattedDate = dateObj.toLocaleDateString('en-US', options);
+    
+          if (dateElement) {
+            dateElement.textContent = formattedDate;
+          }
+        }
+  
+        const backButton = document.getElementById("backButton");
+      if (backButton) {
+        backButton.addEventListener("click", () => {
+          window.location.href = "M5.Analytics.html";
+        });
+      }
+      });
+      
+    </script>
   </body>
