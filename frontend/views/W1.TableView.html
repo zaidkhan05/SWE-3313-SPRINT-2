@@ -139,11 +139,14 @@
         if (result.success) {
           closePopup();
           fetchTables();
-
           if (newStatus === "Reserved") {
-            // Redirect to the menu page
+            const orderRes = await fetch("http://localhost:5000/api/orders/new-id");
+            const orderData = await orderRes.json();
+            localStorage.setItem("activeOrderId", orderData.OrderID);
             window.location.href = "W4.Menu.Appetizers.html";
           }
+
+         
 
         } else {
           alert("Failed to update table.");

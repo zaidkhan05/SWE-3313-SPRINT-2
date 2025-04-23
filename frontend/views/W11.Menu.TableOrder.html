@@ -32,6 +32,19 @@
         margin: 0 1rem;
         cursor: pointer;
       }
+      .back-button {
+        text-align: center;
+        margin-top: 2rem;
+      }
+      .back-button a {
+        text-decoration: none;
+        font-size: 1.2rem;
+        color: #333;
+        border: 1px solid #888;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        background-color: #eee;
+      }
     </style>
   </head>
   <body>
@@ -53,6 +66,9 @@
         <button onclick="sendOrder()">Send to Kitchen</button>
         <button onclick="clearOrder()">Clear Order</button>
       </div>
+      <div class="back-button">
+        <a href="W1.TableView.html">← Back to Table View</a>
+      </div>
     </div>
 
     <script>
@@ -67,7 +83,6 @@
 
         const orderItems = await orderRes.json();
         const menuItems = await menuRes.json();
-        
 
         itemMap = {};
         menuItems.forEach(item => {
@@ -85,15 +100,12 @@
           container.innerHTML = "<p>No items in this order.</p>";
           return;
         }
-        //print the items to the console
+
         console.log(items);
-        //print the itemMap to the console
         console.log(itemMap);
-        //print the currentOrderId to the console
         console.log(currentOrderId);
-        
+
         items.forEach(item => {
-            
           const el = document.createElement("div");
           el.className = "order-item";
           const itemName = itemMap[item.ItemID.toString()] || `Item ${item.ItemID}`;

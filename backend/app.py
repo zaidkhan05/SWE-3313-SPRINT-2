@@ -1,17 +1,17 @@
-
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify 
 from flask_cors import CORS
 import pandas as pd
 import os
 from datetime import datetime
+import sys
+import webbrowser
+from threading import Timer
 
 app = Flask(__name__)
 CORS(app)
 
-import sys
-
 if getattr(sys, 'frozen', False):
-    base_path = sys._MEIPASS  # PyInstaller's temp unpack path
+    base_path = sys._MEIPASS
 else:
     base_path = os.path.abspath("backend/")
 
@@ -35,9 +35,6 @@ def load_csv(file, columns):
 def save_csv(df, file):
     df.to_csv(file, index=False)
 
-
-
-# ----------------------- AUTH: LOGIN WITH ATTEMPT TRACKING -----------------------
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.json
@@ -56,11 +53,7 @@ def login():
     if not match.empty:
         attempts = attempts[attempts["username"] != username]
         save_csv(attempts, ATTEMPTS_FILE)
-        return jsonify({
-            "success": True,
-            "username": username,
-            "role": match.iloc[0]["Role"]
-        })
+        return jsonify({"success": True, "username": username, "role": match.iloc[0]["Role"]})
     else:
         if username in attempts["username"].values:
             attempts.loc[attempts["username"] == username, "attempts"] += 1
@@ -87,8 +80,6 @@ def reset_attempts():
     save_csv(attempts, ATTEMPTS_FILE)
     return jsonify({"success": True, "message": f"Login attempts reset for {target_user}"})
 
-
-# ----------------------- TABLE ROUTES -----------------------
 @app.route("/api/tables", methods=["GET"])
 def get_tables():
     tables = load_csv(TABLES_FILE, ["TableID", "Status", "WaiterID", "BusboyID"])
@@ -104,17 +95,11 @@ def update_table_status():
         return jsonify({"success": True})
     return jsonify({"success": False, "message": "Table not found"}), 404
 
-
-
-# ----------------------- MENU ROUTES -----------------------
-
 @app.route("/api/menu", methods=["GET"])
 def get_full_menu():
     menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock"])
     return menu.to_dict(orient="records")
 
-
-<<<<<<< HEAD
 @app.route("/api/menu/<category>", methods=["GET"])
 def get_menu_by_category(category):
     menu = load_csv(MENU_FILE, ["ItemID", "Name", "Category", "Price", "Stock"])
@@ -128,13 +113,6 @@ def add_order_item():
     order_items = pd.concat([order_items, pd.DataFrame([data])], ignore_index=True)
     save_csv(order_items, ORDER_ITEMS_FILE)
     return jsonify({"success": True})
-=======
-# @app.route("/api/waiter/orders", methods=["GET"])
-# def waiter_orders():
-#     orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
-#     pending = orders[orders["Status"].str.lower() != "ready"]
-#     return pending.to_dict(orient="records")
->>>>>>> eb1819c84c69bef58285384439a706bcac58477b
 
 @app.route("/api/orders/finalize", methods=["POST"])
 def finalize_order():
@@ -143,19 +121,17 @@ def finalize_order():
 
     orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
     if order_id not in orders["OrderID"].values:
-        # Add new order if not already there
         new_row = {
             "OrderID": order_id,
             "Status": "Pending",
             "TimeStamp": datetime.now().isoformat(),
-            "WaiterID": "EMP101",  # Replace with actual waiter ID if tracked
-            "TableID": "A1"        # Replace with actual table ID if tracked
+            "WaiterID": "EMP101",
+            "TableID": "A1"
         }
         orders = pd.concat([orders, pd.DataFrame([new_row])], ignore_index=True)
         save_csv(orders, ORDERS_FILE)
 
     return jsonify({"success": True, "message": f"Order {order_id} finalized."})
-
 
 @app.route("/api/order-items/clear", methods=["POST"])
 def clear_order_items():
@@ -171,15 +147,33 @@ def get_order_items():
     order_id = request.args.get("order_id")
     order_items = load_csv(ORDER_ITEMS_FILE, ["OrderID", "ItemID", "Quantity", "Customization"])
     filtered = order_items[order_items["OrderID"] == order_id]
-    filtered = filtered.fillna("")  # <--- ✅ Fix NaN values
+    filtered = filtered.fillna("")
     return filtered.to_dict(orient="records")
 
+@app.route("/api/orders/new-id", methods=["GET"])
+def get_next_order_id():
+    orders = load_csv(ORDERS_FILE, ["OrderID", "Status", "TimeStamp", "WaiterID", "TableID"])
+
+    def extract_number(oid):
+        try:
+            return int(oid.replace("ORD", ""))
+        except:
+            return 0
+
+    if not orders.empty:
+        used_ids = orders["OrderID"].dropna().apply(extract_number)
+        max_id = used_ids.max()
+    else:
+        max_id = 0
+
+    next_id = f"ORD{str(max_id + 1).zfill(3)}"
+    return jsonify({"OrderID": next_id})
 
 
 
-# ----------------------- MANAGER ROUTES -----------------------
 
-#---------------- MANGER: INVENTORY -----------------
+
+
 @app.route("/api/inventory", methods=["GET"])
 def get_inventory():
     inventory = load_csv(INVENTORY_FILE, ["InventoryID", "ItemName", "Category", "CurrentStock", "TimesOrdered"])
@@ -189,12 +183,8 @@ def get_inventory():
 def order_inventory_item():
     data = request.json
     item_name = data.get("ItemName", "").strip().lower()
-
     inventory = load_csv(INVENTORY_FILE, ["InventoryID", "ItemName", "Category", "CurrentStock", "TimesOrdered"])
-
-    # Normalize the column for comparison
     inventory["ItemName_normalized"] = inventory["ItemName"].str.strip().str.lower()
-
     match = inventory[inventory["ItemName_normalized"] == item_name]
 
     if match.empty:
@@ -204,24 +194,16 @@ def order_inventory_item():
     inventory.at[index, "CurrentStock"] += 1
     inventory.at[index, "TimesOrdered"] += 1
 
-    inventory = inventory.drop(columns=["ItemName_normalized"])  # Clean up temp column
+    inventory = inventory.drop(columns=["ItemName_normalized"])
     save_csv(inventory, INVENTORY_FILE)
 
     return jsonify({"success": True, "message": f"{inventory.at[index, 'ItemName']} updated in inventory."})
 
-# ----------------------- MANAGER: EMPLOYEE MANAGEMENT -----------------------
 @app.route("/api/manager/employees", methods=["GET"])
 def manager_get_employees():
-    users = load_csv(
-        USERS_FILE,
-        ["UserName", "Password", "EmployeeID", "Role", "Clock_In_Time", "Clock_Out_Time"]
-    )
-
+    users = load_csv(USERS_FILE, ["UserName", "Password", "EmployeeID", "Role", "Clock_In_Time", "Clock_Out_Time"])
     users = users.astype(object).where(pd.notnull(users), None)
-
     return jsonify(users.to_dict(orient="records"))
-
-
 
 @app.route("/api/manager/employees", methods=["POST"])
 def manager_add_employee():
@@ -246,23 +228,16 @@ def manager_add_employee():
 def manager_update_employee():
     data = request.json
     users = load_csv(USERS_FILE, ["UserName", "Password", "EmployeeID", "Role", "Clock_In_Time", "Clock_Out_Time"])
-
-    # Find row based on EmployeeID
     match = users[users["EmployeeID"] == data["EmployeeID"]]
     if match.empty:
         return jsonify({"success": False, "message": "Employee ID not found."}), 404
 
     idx = match.index[0]
-
-    # Update fields if present
     for field in ["UserName", "Password", "Role", "EmployeeID"]:
         if field in data:
             users.at[idx, field] = data[field]
-
     save_csv(users, USERS_FILE)
     return jsonify({"success": True, "message": "User updated successfully."})
-
-
 
 @app.route("/api/manager/employees/delete", methods=["POST"])
 def manager_delete_employee():
@@ -273,12 +248,6 @@ def manager_delete_employee():
     users = users[users["UserName"] != data["UserName"]]
     save_csv(users, USERS_FILE)
     return jsonify({"success": True, "message": "User removed successfully."})
-
-
-
-
-import webbrowser
-from threading import Timer
 
 def open_browser():
     file_path = os.path.abspath("frontend/views/L1.UsernamePassword.html")
