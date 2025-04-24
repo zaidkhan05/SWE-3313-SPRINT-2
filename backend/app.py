@@ -108,8 +108,6 @@ def update_table_status():
     tables = load_csv(TABLES_FILE, ["TableID", "Status", "WaiterID", "BusboyID"])
     if data["TableID"] in tables["TableID"].values:
         tables.loc[tables["TableID"] == data["TableID"], "Status"] = data["Status"]
-        tables.loc[tables["TableID"] == data["TableID"], "WaiterID"] = data["WaiterID"]
-
         save_csv(tables, TABLES_FILE)
         return jsonify({"success": True})
     return jsonify({"success": False, "message": "Table not found"}), 404
