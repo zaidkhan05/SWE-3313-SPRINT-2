@@ -26,3 +26,5 @@ Manager Role
 - Register new employees into the system
 - Analyze restaurant performance (daily, monthly, yearly views)
 - Use clock-in/clock-out functionality like waiters
+
+New ReadME
